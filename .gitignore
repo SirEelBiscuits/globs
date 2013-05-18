@@ -1,0 +1,4 @@
+*.o
+glTest.exe
+.depend
+version.inc

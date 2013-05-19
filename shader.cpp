@@ -96,11 +96,30 @@ void main() {
 );
 
 
-GLuint GetBasicShader() {
+GLuint GetBasicShader(bool force) {
+	static GLuint BasicShader = -1;
+
+	if( BasicShader != static_cast<GLuint>(-1) && !force )
+		return BasicShader;
+
 	std::cerr << frag << std::endl;
 	std::cerr << vert << std::endl;
 
 	GLuint VS = LoadShaderFromBuffer(vert, GL_VERTEX_SHADER);
 	GLuint FS = LoadShaderFromBuffer(frag, GL_FRAGMENT_SHADER);
-	return CreateProgramFromShaders(VS, FS);
+	return BasicShader = CreateProgramFromShaders(VS, FS);
+}
+
+GLuint BindParameter(
+	GLuint program,
+       	char const* name,
+       	GLuint size,
+       	GLenum type,
+       	GLsizei stride,
+	GLvoid* offset
+) {
+	GLint position = glGetAttribLocation(program, name);
+	glVertexAttribPointer(position, size, type, GL_FALSE, stride, offset);
+	glEnableVertexAttribArray(position);
+	return position;
 }

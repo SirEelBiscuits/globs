@@ -55,18 +55,18 @@ int main() {
 	};
 
 	GLfloat colors[] = {
-		1.0,	1.0,	1.0,	1.0,
-		1.0,	0.3,	1.0,	1.0,
-		1.0,	1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,	1.0,
-		1.0,	1.0,	0.3,	1.0,
-		1.0,	1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,	1.0,
-		1.0,	0.5,	1.0,	1.0,
-		1.0,	1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,	1.0,
+		1.0,	1.0,	1.0,
+		1.0,	1.0,	0.3,
+		1.0,	1.0,	1.0,
+		1.0,	1.0,	1.0,
+		1.0,	1.0,	1.0,
+		1.0,	1.0,	1.0,
+		1.0,	1.0,	1.0,
+		1.0,	0.3,	1.0,
+		1.0,	1.0,	1.0,
+		1.0,	1.0,	1.0,
+		1.0,	1.0,	1.0,
+		0.5,	1.0,	1.0
 	};
 
 	GLuint vbo; glGenBuffers(1, &vbo);
@@ -76,21 +76,10 @@ int main() {
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(verts), sizeof(colors), colors);
 
 	GLuint vao;
-	{
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-		GLuint prog = GetBasicShader();
-
-		GLint position_attribute = glGetAttribLocation(prog, "position");
-		glVertexAttribPointer(position_attribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(position_attribute);
-		std::cout << "pos: " << position_attribute << std::endl;
-
-		GLint color_attribute = glGetAttribLocation(prog, "color");
-		glVertexAttribPointer(color_attribute, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)sizeof(verts));
-		glEnableVertexAttribArray(color_attribute);
-		std::cout << "color: " << color_attribute << std::endl;
-	}
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	BindParameter(GetBasicShader(), "position", 2, GL_FLOAT, 0, 0);
+	BindParameter(GetBasicShader(), "color", 3, GL_FLOAT, 0, (GLvoid*)sizeof(verts));
 
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {

@@ -56,9 +56,6 @@ GLuint CreateProgramFromShaders( GLuint vertShader, GLuint fragShader ) {
 	glAttachShader(prog, vertShader);
 	glAttachShader(prog, fragShader);
 
-	glDeleteShader(vertShader);
-	glDeleteShader(fragShader);
-
 	glLinkProgram(prog);
 	glUseProgram(prog);
 
@@ -68,7 +65,11 @@ GLuint CreateProgramFromShaders( GLuint vertShader, GLuint fragShader ) {
 GLuint CreateProgram( char const* vertFile, char const* fragFile) {
 	GLuint vertShader = LoadShader(vertFile, GL_VERTEX_SHADER);
 	GLuint fragShader = LoadShader(fragFile, GL_FRAGMENT_SHADER);
-	return CreateProgramFromShaders(vertShader, fragShader);
+	auto prog = CreateProgramFromShaders(vertShader, fragShader);
+
+	glDeleteShader(vertShader);
+	glDeleteShader(fragShader);
+	return prog;
 }
 
 std::string frag(

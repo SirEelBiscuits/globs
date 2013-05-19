@@ -12,6 +12,8 @@
 #include "version.inc"
 #include "arrays.h"
 
+#include <IL/il.h>
+
 int main() {
 	std::cout << "Starting version " VERSION << std::endl;
 	if( !glfwInit() ) {
@@ -36,6 +38,8 @@ int main() {
 		glfwTerminate();
 		exit(-1);
 	}
+
+	ilInit();
 
 	std::vector<GLfloat> verts = {
 		0.,	0.,

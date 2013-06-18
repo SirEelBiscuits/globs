@@ -79,6 +79,7 @@ int main() {
 	Interleave(verts, 2, colors, 3, interleaved);
 	for( float f : interleaved )
 		std::cout << f << ", ";
+	std::cout << std::endl;
 
 	GLuint vbo; glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);

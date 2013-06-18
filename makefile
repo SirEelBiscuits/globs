@@ -14,8 +14,8 @@ CPP_FILES := $(wildcard $(SRCDIR)/*.cpp)
 OBJS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(CPP_FILES))
 LIBBASE = Z:\\Windows\\ManualInstalls\\dev-libs
 CC = g++
-CPPFLAGS = -Wall -pedantic -std=c++11 -I$(LIBBASE)\\include -static-libgcc -static-libstdc++
-LDFLAGS = -L$(LIBBASE)\\lib -static -lGLFW -lglew32s -lopengl32 -ldevil
+CPPFLAGS = -Wall -pedantic -std=c++11 -I$(LIBBASE)\\include 
+LDFLAGS = -L$(LIBBASE)\\lib -lGLFW -lglew32s -lopengl32 -ldevil
  
 all: version $(PROGRAM) 
  

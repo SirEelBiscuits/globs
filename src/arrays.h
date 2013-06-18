@@ -10,7 +10,7 @@ bool Interleave(std::vector<T> First, int FirstCount, std::vector<T> Second, int
 
 	out.clear();
 	int items = First.size() / FirstCount;
-	out.resize(items);
+	out.reserve(items);
 	for( int i = 0; i < items; ++i ) {
 		out.insert( out.end(), First.begin() + i * FirstCount, First.begin() + (i+1) * FirstCount);
 		out.insert( out.end(), Second.begin() + i * SecondCount, Second.begin() + (i+1) * SecondCount);

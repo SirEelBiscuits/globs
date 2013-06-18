@@ -7,8 +7,11 @@ This makefile requires GNU Make.
 endif
  
 PROGRAM = glTest
-CPP_FILES := $(wildcard *.cpp)
-OBJS := $(patsubst %.cpp, %.o, $(CPP_FILES))
+SRCDIR = src
+OBJDIR = intermediate
+OUTDIR = bin
+CPP_FILES := $(wildcard $(SRCDIR)/*.cpp)
+OBJS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(CPP_FILES))
 LIBBASE = Z:\\Windows\\ManualInstalls\\dev-libs
 CC = g++
 CPPFLAGS = -Wall -pedantic -std=c++11 -I$(LIBBASE)\\include -static-libgcc -static-libstdc++
@@ -17,7 +20,7 @@ LDFLAGS = -L$(LIBBASE)\\lib -static -lGLFW -lglew32s -lopengl32 -ldevil
 all: version $(PROGRAM) 
  
 $(PROGRAM): .depend $(OBJS)
-	$(CC) $(CPPFLAGS) $(OBJS) $(LDFLAGS) -o $(PROGRAM)
+	$(CC) $(CPPFLAGS) $(OBJS) $(LDFLAGS) -o $(OUTDIR)/$(PROGRAM)
  
 depend: .depend
  
@@ -30,18 +33,18 @@ depend: .depend
 -include .depend
  
 version:
-	echo "#define VERSION \"` date +%s `\"" > version.inc
+	echo "#define VERSION \"` date +%s `\"" > $(SRCDIR)/version.inc
 
 # These are the pattern matching rules. In addition to the automatic
 # variables used here, the variable $* that matches whatever % stands for
 # can be useful in special cases.
-%.o: %.cpp
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CC) $(CPPFLAGS) -c $< -o $@
  
 %: %.cpp
 	$(CC) $(CPPFLAGS) -o $@ $<
  
 clean:
-	rm -f .depend *.o
+	rm -f .depend $(OBJDIR)/*.o $(OUTDIR)/$(PROGRAM)
  
 .PHONY: clean depend

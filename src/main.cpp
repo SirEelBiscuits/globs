@@ -74,22 +74,20 @@ int main() {
 		0.5,	1.0,	1.0
 	};
 
-	std::vector<GLfloat> interleaved;
-
-	Interleave(verts, 2, colors, 3, interleaved);
-	for( float f : interleaved )
-		std::cout << f << ", ";
-	std::cout << std::endl;
-
 	GLuint vbo; glGenBuffers(1, &vbo);
+	GLuint vbo2; glGenBuffers(1, &vbo2);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(GLfloat) , interleaved.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(GLfloat) , verts.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo2);
+	glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(GLfloat) , colors.data(), GL_STATIC_DRAW);
 
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
-	BindParameter(GetBasicShader(), "position", 2, GL_FLOAT, 5 * sizeof(GLfloat), 0);
-	BindParameter(GetBasicShader(), "color", 3, GL_FLOAT, 5 * sizeof(GLfloat), (GLvoid*)(sizeof(GLfloat)*2));
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	BindParameter(GetBasicShader(), "position", 2, GL_FLOAT, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo2);
+	BindParameter(GetBasicShader(), "color", 3, GL_FLOAT, 0, 0);
 
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {

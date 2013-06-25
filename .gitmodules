@@ -1,0 +1,3 @@
+[submodule "src/gargamel"]
+	path = src/gargamel
+	url = ssh://sireel@bluescreenofdoom.com/srv/git/gargamel.git

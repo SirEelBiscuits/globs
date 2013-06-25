@@ -11,13 +11,48 @@
 #include "shader.h"
 #include "version.inc"
 #include "arrays.h"
+#include "log.h"
+#include "gargamel/gargamel.h"
 
 #include <IL/il.h>
 
-int main() {
-	std::cout << "Starting version " VERSION << std::endl;
+enum ArgNames {
+	Unknown,
+	Help,
+	LogFile,
+	LogChannel,
+};
+START_ARGS(Arguments)
+	DESCRIBE_ARG(Unknown, 		'\0', 	nullptr, NoArg, 	"Usage Instructions:\n")
+	DESCRIBE_ARG(Help, 		'h', 	"help", NoArg, 		"\tPrint help text\n")
+	DESCRIBE_ARG(LogFile, 		'\0', 	"log", 	RequiredArg, 	"\tSpecify log file\n")
+	DESCRIBE_ARG_ARRAY(LogChannel, 		"log-channel", 		"\tTurn on logging channel\n")
+END_ARGS
+
+int main(int argc, char* argv[]) {
+	bool argProc = Gargamel::Process(Arguments, argc, argv);
+	if( !argProc )
+		std::cout << "Arguments iffy " << argc << std::endl;
+
+	if( Gargamel::ArgumentSet[Help].isArgumentPresent )
+	{
+		Gargamel::ShowUsage();
+		return EXIT_SUCCESS;
+	}
+	if( Gargamel::ArgumentSet[LogFile].isArgumentPresent )
+	{
+		std::cout << "filename set to " << Gargamel::ArgumentSet[LogFile].argumentValue << std::endl;
+		Logger::setFileName( Gargamel::ArgumentSet[LogFile].argumentValue );
+	}
+	for( auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray) )
+	{
+		std::cout << "Channel activated: " << s << std::endl;
+		Logger::activateChannel(s);
+	}
+
+	Logger::log( "INFO", "Starting version" VERSION );
 	if( !glfwInit() ) {
-		std::cerr << "fail";
+		Logger::log( "ERR", "glfwInit failed" );
 		exit(-1);
 	}
 
@@ -29,7 +64,7 @@ int main() {
 
 	if( !glfwOpenWindow(800,600,8,8,8,0,0,0,GLFW_WINDOW) ) {
 		glfwTerminate();
-		std::cerr << "fail2";
+		Logger::log( "ERR", "Failed to open window" );
 		exit(-1);
 	}
 
@@ -77,9 +112,6 @@ int main() {
 	std::vector<GLfloat> interleaved;
 
 	Interleave(verts, 2, colors, 3, interleaved);
-	for( float f : interleaved )
-		std::cout << f << ", ";
-	std::cout << std::endl;
 
 	GLuint vbo; glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);

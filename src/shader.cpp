@@ -3,6 +3,7 @@
 #include <GL/glfw.h>
 
 #include "shader.h"
+#include "log.h"
 
 #include <iostream>
 #include <string>
@@ -32,13 +33,13 @@ GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType) {
 	GLint test;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &test);
 	if(!test) {
-		std::cerr << "Shader compilation failed." << std::endl;
+		Logger::log("Shader", "Shader compilation failed.");
 		GLint length;
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 		std::string log;
 		log.reserve(length);
 		glGetShaderInfoLog(shader, log.size(), nullptr, const_cast<char*>(log.data()));
-		std::cerr << log << std::endl;
+		Logger::log( "Shader", log );
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -103,8 +104,8 @@ GLuint GetBasicShader(bool force) {
 	if( BasicShader != static_cast<GLuint>(-1) && !force )
 		return BasicShader;
 
-	std::cerr << frag << std::endl;
-	std::cerr << vert << std::endl;
+	Logger::log( "Shader", frag );
+	Logger::log( "Shader", vert );
 
 	GLuint VS = LoadShaderFromBuffer(vert, GL_VERTEX_SHADER);
 	GLuint FS = LoadShaderFromBuffer(frag, GL_FRAGMENT_SHADER);

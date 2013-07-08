@@ -85,6 +85,9 @@ void Init(int argc, char* argv[]) {
 		Gargamel::ShowUsage();
 		exit( EXIT_SUCCESS );
 	}
+	if( Gargamel::ArgumentSet[LogAll].isArgumentPresent ) {
+		Logger::setLogAll(true);
+	}
 	if( Gargamel::ArgumentSet[LogFile].isArgumentPresent ) {
 		if( !Logger::setFileName( Gargamel::ArgumentSet[LogFile].argumentValue ) ) {
 			std::cerr << "Failed to open log file" << std::endl;

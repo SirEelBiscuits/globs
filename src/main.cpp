@@ -104,13 +104,17 @@ void Init(int argc, char* argv[]) {
 		exit(-1);
 	}
 
+	int w = Gargamel::ArgumentSet[ScreenWidth].intVal();
+	int h = Gargamel::ArgumentSet[ScreenHeight].intVal();
+
+
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
 
 
-	if( !glfwOpenWindow(800,600,8,8,8,0,0,0,GLFW_WINDOW) ) {
+	if( !glfwOpenWindow(w,h,8,8,8,0,0,0,GLFW_WINDOW) ) {
 		glfwTerminate();
 		Logger::log( "ERR", "Failed to open window" );
 		exit(-1);

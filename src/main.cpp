@@ -114,7 +114,11 @@ void Init(int argc, char* argv[]) {
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
 
 
-	if( !glfwOpenWindow(w,h,8,8,8,0,0,0,GLFW_WINDOW) ) {
+	int mode = GLFW_WINDOW;
+	if( Gargamel::ArgumentSet[FullScreen].isArgumentPresent )
+		mode = GLFW_FULLSCREEN;
+
+	if( !glfwOpenWindow(w,h,8,8,8,0,0,0,mode) ) {
 		glfwTerminate();
 		Logger::log( "ERR", "Failed to open window" );
 		exit(-1);

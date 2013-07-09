@@ -8,7 +8,8 @@ enum ArgNames {
 	LogChannel,
 	LogAll,
 	ScreenWidth,
-	ScreenHeight
+	ScreenHeight,
+	FullScreen,
 };
 START_ARGS(Arguments)
 	DESCRIBE_ARG(Unknown, 		'\0', 	nullptr, NoArg, 	"Usage Instructions:\n")
@@ -19,6 +20,7 @@ START_ARGS(Arguments)
 	DESCRIBE_ARG(LogAll,		'v',	"verbose", NoArg,	"\tLog all messages, regardless of channel\n")
 	DESCRIBE_ARG_DEFAULT(ScreenWidth,	'w',	"width", RequiredArg,	"800", "\tSet the width of the window\n")
 	DESCRIBE_ARG_DEFAULT(ScreenHeight,	'h',	"height", RequiredArg,	"600", "\tSet the height of the window\n")
+	DESCRIBE_ARG(FullScreen,	'f',	"full-screen", NoArg,	"\tStart in full screen mode\n")
 END_ARGS
 
 void Init(int argc, char* argv[]);

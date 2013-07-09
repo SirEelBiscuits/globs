@@ -16,7 +16,7 @@
 #include <IL/il.h>
 
 int main(int argc, char* argv[]) {
-	Init( argc, argv );
+	Init(argc, argv);
 
 	std::vector<GLfloat> verts = {
 		0.,	0.,
@@ -81,26 +81,24 @@ int main(int argc, char* argv[]) {
 void Init(int argc, char* argv[]) {
 	Gargamel::Process(Arguments, argc, argv);
 
-	if( Gargamel::ArgumentSet[Help].isArgumentPresent ) {
+	if(Gargamel::ArgumentSet[Help].isArgumentPresent) {
 		Gargamel::ShowUsage();
-		exit( EXIT_SUCCESS );
+		exit(EXIT_SUCCESS);
 	}
-	if( Gargamel::ArgumentSet[LogAll].isArgumentPresent ) {
-		Logger::setLogAll(true);
-	}
-	if( Gargamel::ArgumentSet[LogFile].isArgumentPresent ) {
-		if( !Logger::setFileName( Gargamel::ArgumentSet[LogFile].argumentValue ) ) {
-			std::cerr << "Failed to open log file" << std::endl;
+	Logger::setLogAll(Gargamel::ArgumentSet[LogAll].isArgumentPresent);
+	Logger::echo(Gargamel::ArgumentSet[EchoLog].isArgumentPresent);
+	if(Gargamel::ArgumentSet[LogFile].isArgumentPresent) {
+		if(!Logger::setFileName(Gargamel::ArgumentSet[LogFile].argumentValue)) {
+			Logger::log("ERR", "Failed to open log file");
 		}
 	}
-	Logger::echo( Gargamel::ArgumentSet[EchoLog].isArgumentPresent );
-	for( auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray) ) {
+	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {
 		Logger::activateChannel(s);
 	}
 
-	Logger::log( "INFO", "Starting version" VERSION );
-	if( !glfwInit() ) {
-		Logger::log( "ERR", "glfwInit failed" );
+	Logger::log("INFO", "Starting version " VERSION);
+	if(!glfwInit()) {
+		Logger::log("ERR", "glfwInit failed");
 		exit(-1);
 	}
 
@@ -114,21 +112,27 @@ void Init(int argc, char* argv[]) {
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
 
 
+	Logger::log("INFO", "Initialising window");
 	int mode = GLFW_WINDOW;
-	if( Gargamel::ArgumentSet[FullScreen].isArgumentPresent )
+	if(Gargamel::ArgumentSet[FullScreen].isArgumentPresent)
 		mode = GLFW_FULLSCREEN;
 
-	if( !glfwOpenWindow(w,h,8,8,8,0,0,0,mode) ) {
+	if(!glfwOpenWindow(w, h, 8, 8, 8, 0, 0, 0, mode)) {
 		glfwTerminate();
-		Logger::log( "ERR", "Failed to open window" );
+		Logger::log("ERR", "Failed to open window");
 		exit(-1);
 	}
 
+	Logger::log("INFO", "Starting GLEW");
 	glewExperimental = GL_TRUE;
-	if( glewInit() != GLEW_OK) {
+	if(glewInit() != GLEW_OK) {
 		glfwTerminate();
-		exit(-1);
+		Logger::log("ERR", "Failed to start GLEW");
+		exit(EXIT_FAILURE);
 	}
 
+	Logger::log("INFO", "Starting devIL");
 	ilInit();
+
+	Logger::log("INFO", "Initialisation Complete");
 }

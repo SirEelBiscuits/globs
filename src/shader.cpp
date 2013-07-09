@@ -12,11 +12,11 @@
 #include <cstdlib>
 
 
-void ReadFile( char const* file, std::string& buffer) {
+void ReadFile(char const* file, std::string& buffer) {
 	std::ifstream f(file);
 
 	char c = f.get();
-	while( f.good() ) {
+	while(f.good()) {
 		buffer.push_back(c);
 		c = f.get();
 	}
@@ -39,7 +39,7 @@ GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType) {
 		std::string log;
 		log.reserve(length);
 		glGetShaderInfoLog(shader, log.size(), nullptr, const_cast<char*>(log.data()));
-		Logger::log( "Shader", log );
+		Logger::log("Shader", log);
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -52,7 +52,7 @@ GLuint LoadShader(char const* file, GLenum shaderType) {
 	return LoadShaderFromBuffer(buffer, shaderType);
 }
 
-GLuint CreateProgramFromShaders( GLuint vertShader, GLuint fragShader ) {
+GLuint CreateProgramFromShaders(GLuint vertShader, GLuint fragShader) {
 	GLuint prog = glCreateProgram();
 	glAttachShader(prog, vertShader);
 	glAttachShader(prog, fragShader);
@@ -63,7 +63,7 @@ GLuint CreateProgramFromShaders( GLuint vertShader, GLuint fragShader ) {
 	return prog;
 }
 
-GLuint CreateProgram( char const* vertFile, char const* fragFile) {
+GLuint CreateProgram(char const* vertFile, char const* fragFile) {
 	GLuint vertShader = LoadShader(vertFile, GL_VERTEX_SHADER);
 	GLuint fragShader = LoadShader(fragFile, GL_FRAGMENT_SHADER);
 	auto prog = CreateProgramFromShaders(vertShader, fragShader);
@@ -101,11 +101,11 @@ void main() {
 GLuint GetBasicShader(bool force) {
 	static GLuint BasicShader = -1;
 
-	if( BasicShader != static_cast<GLuint>(-1) && !force )
+	if(BasicShader != static_cast<GLuint>(-1) && !force)
 		return BasicShader;
 
-	Logger::log( "Shader", frag );
-	Logger::log( "Shader", vert );
+	Logger::log("Shader", frag);
+	Logger::log("Shader", vert);
 
 	GLuint VS = LoadShaderFromBuffer(vert, GL_VERTEX_SHADER);
 	GLuint FS = LoadShaderFromBuffer(frag, GL_FRAGMENT_SHADER);

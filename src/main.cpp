@@ -73,6 +73,10 @@ int main(int argc, char* argv[]) {
 		glDrawArrays(GL_TRIANGLES, 0, 12);
 
 		glfwSwapBuffers();
+
+		//temporary shutdown command
+		if(glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS)
+			break;
 	}
 	glfwTerminate();
 	return 0;

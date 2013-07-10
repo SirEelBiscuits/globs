@@ -89,8 +89,12 @@ void Init(int argc, char* argv[]) {
 		Gargamel::ShowUsage();
 		exit(EXIT_SUCCESS);
 	}
+
 	Logger::setLogAll(Gargamel::ArgumentSet[LogAll].isArgumentPresent);
 	Logger::echo(Gargamel::ArgumentSet[EchoLog].isArgumentPresent);
+	//Technically this should go two lines earlier, but there is no way for it to
+	// fail before here, and no way for that output to go anywhere either
+	Logger::log("INFO", "Initialising logger");
 	if(Gargamel::ArgumentSet[LogFile].isArgumentPresent) {
 		if(!Logger::setFileName(Gargamel::ArgumentSet[LogFile].argumentValue)) {
 			Logger::log("ERR", "Failed to open log file");
@@ -103,28 +107,24 @@ void Init(int argc, char* argv[]) {
 	Logger::log("INFO", "Starting version " VERSION);
 	if(!glfwInit()) {
 		Logger::log("ERR", "glfwInit failed");
-		exit(-1);
+		exit(EXIT_FAILURE);
 	}
 
+	Logger::log("INFO", "Initialising window");
 	int w = Gargamel::ArgumentSet[ScreenWidth].intVal();
 	int h = Gargamel::ArgumentSet[ScreenHeight].intVal();
-
-
+	int mode = GLFW_WINDOW;
+	if(Gargamel::ArgumentSet[FullScreen].isArgumentPresent)
+		mode = GLFW_FULLSCREEN;
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
 	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
 
-
-	Logger::log("INFO", "Initialising window");
-	int mode = GLFW_WINDOW;
-	if(Gargamel::ArgumentSet[FullScreen].isArgumentPresent)
-		mode = GLFW_FULLSCREEN;
-
 	if(!glfwOpenWindow(w, h, 8, 8, 8, 0, 0, 0, mode)) {
 		glfwTerminate();
 		Logger::log("ERR", "Failed to open window");
-		exit(-1);
+		exit(EXIT_FAILURE);
 	}
 
 	Logger::log("INFO", "Starting GLEW");

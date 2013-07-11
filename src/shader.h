@@ -11,6 +11,14 @@
 GLuint LoadShader(char const* file, GLenum shaderType);
 
 /*
+ *  * @brief Load a shader from an in-memory buffer
+ *   * @param buffer is the string containing the data
+ *    * @param shaderType indicates the type of shader
+ *     * @return The shader handle
+ *      */
+GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType);
+
+/*
  * @brief Create a shader program from the supplied files
  * @param vertFile Vertex shader source file.
  * @param fragFile Fragment shader source file.

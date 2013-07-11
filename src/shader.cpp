@@ -4,24 +4,13 @@
 
 #include "shader.h"
 #include "log.h"
+#include "utility.h"
 
 #include <iostream>
 #include <string>
 #include <fstream>
 
 #include <cstdlib>
-
-
-void ReadFile(char const* file, std::string& buffer) {
-	std::ifstream f(file);
-
-	char c = f.get();
-	while(f.good()) {
-		buffer.push_back(c);
-		c = f.get();
-	}
-	return;
-}
 
 GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType) {
 	char const* src = buffer.c_str();

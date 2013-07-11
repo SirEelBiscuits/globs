@@ -12,11 +12,19 @@
 #include "version.inc"
 #include "arrays.h"
 #include "log.h"
+#include "modelloader.h"
+#include "model.h"
 
 #include <IL/il.h>
 
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
+
+	Model* test;
+
+	char const* modelsource = "pinwheel.obj";
+	test = LoadModelFromFile(modelsource);
+	test->list();
 
 	std::vector<GLfloat> verts = {
 		0.,	0.,

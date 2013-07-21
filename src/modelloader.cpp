@@ -9,18 +9,18 @@
 #define LOG "Model"
 
 char const* munchWhitespace(char const* buf) {
-	while( *buf != '\0' && *buf <= ' ' )
+	while(*buf != '\0' && *buf != '\n' && *buf <= ' ')
 		++buf;
 	return buf;
 }
 
 char const* findWhitespace(char const* buf) {
-	while( *buf != '\0' && *buf > ' ' )
+	while(*buf != '\0' && *buf != '\n' && *buf > ' ')
 		++buf;
 	return buf;
 }
 
-bool readVertex(std::string line, glm::vec3& vec) {
+bool readVertex(std::string line, std::vector<const char*>& outStrings) {
 	/* METHOD:
 	 * line should be of the form
 	 * "v $FLOAT $FLOAT $FLOAT"
@@ -28,47 +28,59 @@ bool readVertex(std::string line, glm::vec3& vec) {
 
 	char const* cur = line.c_str();
 
-	if( *cur != 'v' )
+	if(*cur != 'v')
 		return false;
 	++cur;
-	if( *cur == '\0' || *cur > ' ' )
+	if(*cur == '\0' || *cur > ' ')
 		return false;
 	cur = munchWhitespace(cur);
-	if( cur == '\0' )
-		return false;
 
-	glm::vec3 ret;
+	std::vector<const char*> ret;
 
-	for( int i = 0; i < 3; ++i ) {
-		if( cur == '\0' )
+	for(int i = 0; i < 3; ++i) {
+		if(cur == '\0')
 			return false;
-		ret[i] = atof(cur);
+		ret.push_back(cur);
 		cur = findWhitespace(cur);
 		cur = munchWhitespace(cur);
 	}
-
-	vec = ret;
+	outStrings = ret;
 	return true;
 }
 
-bool readFace(std::string line, uint16_t verts[3]) {
+void addVertsToModel(Model* model, std::vector<const char*> verts) {
+	glm::vec3 vec;
+	for(int i = 0; i < 3; ++i) {
+		vec[i]=atof(verts[i]);
+	}
+	model->verts.push_back(vec);
+}
+
+bool readFace(std::string line, std::vector<const char*>& outStrings) {
 	char const* cur = line.c_str();
 
-	if( *cur != 'f' )
+	if(*cur != 'f')
 		return false;
 	++cur;
-	if( *cur == '\0' || *cur > ' ' )
+	if(*cur == '\0' || *cur > ' ')
 		return false;
 	cur = munchWhitespace(cur);
 
-	for( int i = 0; i < 3; ++i ) {
-		if( cur == '\0' )
-			return false;
-		verts[i] = atoi(cur);
+	std::vector<const char*> ret;
+
+	while(*cur != '\n' && *cur != '\0') {
+		ret.push_back(cur);
 		cur = findWhitespace(cur);
 		cur = munchWhitespace(cur);
 	}
+	outStrings = ret;
 	return true;
+}
+
+void addFaceToModel(Model* model, std::vector<const char*> face) {
+	for(auto c: face) {
+		model->indices.push_back(atoi(c));
+	}
 }
 
 Model* LoadModelFromFile(char const* fileName) {
@@ -81,14 +93,14 @@ Model* LoadModelFromBuffer(std::string const& buffer) {
 	/*
 	 * METHOD:
 	 * we are going to be loading .obj files (description at
-	 * http://en.wikipedia.org/wiki/Wavefront_.obj_file )
+	 * http://en.wikipedia.org/wiki/Wavefront_.obj_file)
 	 *
 	 * this would be a lot nicer with regex but boost is a mother fucker
 	 * and gcc doesn't support std::regex yet
 	 *
 	 * Stage 1:
 	 * comprehend 'v' lines with three coordinates
-	 * comprehend 'f' lines, with three verts
+	 * comprehend 'f' lines, with n verts
 	 */
 
 	size_t curPos = 0;
@@ -102,19 +114,17 @@ Model* LoadModelFromBuffer(std::string const& buffer) {
 		std::string curLine(buffer, curPos, nextPos);
 		curPos = nextPos + 1;
 
-		glm::vec3 vec;
-		uint16_t verts[3];
-		if( readVertex(curLine, vec ) ) {
+		std::vector<const char*> vec(3);
+		if(readVertex(curLine, vec)) {
 			Logger::log(LOG, "found vert");
-			ret->verts.push_back(vec);
+			addVertsToModel(ret, vec);
 		}
-		else if( readFace(curLine, verts ) ) {
+		else if(readFace(curLine, vec)) {
 			Logger::log(LOG, "found face");
-			for( int i = 0; i < 3; ++i )
-				ret->indices.push_back(verts[i]);
+			addFaceToModel(ret, vec);
 		}
 
-		if( nextPos == std::string::npos )
+		if(nextPos == std::string::npos)
 			break;
 	}
 

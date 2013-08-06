@@ -18,7 +18,7 @@ public:
 	};
 
 	struct Vert {
-		glm::vec3 p;
+		glm::vec3 v;
 		glm::vec4 c;
 		glm::vec2 t;
 		glm::vec2 n;
@@ -37,10 +37,21 @@ public:
 		};
 	};
 
-	std::vector<Vert> verts;
-	std::vector<uint16_t>  indices;
-
 	void list() const;
+	Vert getOrCreateVert(unsigned int Index);
+	Vert getVert(unsigned int Index) const;
+	void setVert(unsigned int Index, Vert newValue);
+	uint16_t getIndex(unsigned int Index) const;
+	void setIndex(unsigned int Index, uint16_t newValue);
+	void appendIndex(uint16_t newIndex);
+	void Finalise() { _const = true; }
+
+private:
+	bool _const = false;
+	std::vector<Vert> _verts;
+	std::vector<uint16_t>  _indices;
+
+	bool isConst();
 };
 
 MAKE_INDEX(Model::VertComponent);

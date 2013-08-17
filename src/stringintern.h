@@ -15,7 +15,7 @@ private:
 	//non-static parts:
 public:
 	bool operator==(StringIntern& rhs) const;
-	operator char const* const() const;
+	//operator char const* const() const;
 	operator char const*() const;
 	char const * const toString() const;
 

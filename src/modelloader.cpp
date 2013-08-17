@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "modelgl.h"
+
 #define LOG "Model"
 
 char const* munchWhitespace(char const* buf) {
@@ -56,8 +58,8 @@ glm::vec3 vec3FromStringArray(std::vector<const char*> verts) {
 	return ret;
 }
 
-void addVertToModel(Model* model, int index, std::vector<const char*> verts) {
-	Model::Vert vert = model->getOrCreateVert(index);
+void addVertToModel(ModelGL* model, int index, std::vector<const char*> verts) {
+	Vert vert = model->getOrCreateVert(index);
 	vert.v = vec3FromStringArray(verts);
 	model->setVert(index, vert);
 }
@@ -83,7 +85,7 @@ bool readFace(std::string line, std::vector<const char*>& outStrings) {
 	return true;
 }
 
-void addFaceToModel(Model* model, std::vector<const char*> face) {
+void addFaceToModel(ModelGL* model, std::vector<const char*> face) {
 	for(auto v : face)
 		model->appendIndex(atoi(v));
 }
@@ -109,9 +111,9 @@ Model* LoadModelFromBuffer(std::string const& buffer) {
 	 */
 
 	std::string curLine;
-	Model* ret = new Model();
+	ModelGL* ret = new ModelGL();
 
-	Logger::log(LOG, "Started Model Load");
+	Logger::log(LOG, "Started openGL type Model Load");
 
 	size_t curPos = 0;
 	int curIndex = 0;
@@ -141,7 +143,7 @@ Model* LoadModelFromBuffer(std::string const& buffer) {
 		}
 	}
 
-	ret->Finalise();
+	ret->FinaliseLoad();
 	return ret;
 }
 

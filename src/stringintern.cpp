@@ -20,9 +20,11 @@ bool StringIntern::operator==(StringIntern& rhs) const {
 	return idx == rhs.idx;
 }
 
+/*
 StringIntern::operator char const* const() const {
 	return s_strings[idx].c_str();
 }
+*/
 
 StringIntern::operator char const*() const {
 	return s_strings[idx].c_str();

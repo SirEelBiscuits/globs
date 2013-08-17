@@ -1,7 +1,4 @@
-#define GLEW_STATIC
-
-#include <GL/glew.h>
-#include <GL/glfw.h>
+#include "glwrapper.h"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -26,59 +23,11 @@ int main(int argc, char* argv[]) {
 	test = LoadModelFromFile(modelsource);
 	test->list();
 
-	std::vector<GLfloat> verts = {
-		0.,	0.,
-		.5,	0.,
-		.5,	.5,
-
-		0.,	0.,
-		0.,	.5,
-		-.5,	.5,
-
-		0.,	0.,
-		-.5,	0.,
-		-.5,	-.5,
-
-		0.,	0.,
-		0.,	-.5,
-		.5,	-.5
-	};
-
-	std::vector<GLfloat> colors = {
-		1.0,	1.0,	1.0,
-		1.0,	1.0,	0.3,
-		1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,
-		1.0,	0.3,	1.0,
-		1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,
-		1.0,	1.0,	1.0,
-		0.5,	1.0,	1.0
-	};
-
-	std::vector<GLfloat> interleaved;
-
-	Interleave(verts, 2, colors, 3, interleaved);
-
-	GLuint vbo; glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, interleaved.size() * sizeof(GLfloat) , interleaved.data(), GL_STATIC_DRAW);
-
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	BindParameter(GetBasicShader(), "position", 2, GL_FLOAT, 5 * sizeof(GLfloat), 0);
-	BindParameter(GetBasicShader(), "color", 3, GL_FLOAT, 5 * sizeof(GLfloat), (GLvoid*)(sizeof(GLfloat)*2));
-
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glBindVertexArray(vao);
-		glDrawArrays(GL_TRIANGLES, 0, 12);
+		test->Draw();
 
 		glfwSwapBuffers();
 

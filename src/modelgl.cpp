@@ -7,13 +7,12 @@
 void ModelGL::FinaliseLoad() {
 	_const = true;
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vert) * _verts.size(), _verts.data(), GL_STATIC_DRAW);
-	std::cout << "elements: " << _verts.size() << ", size: " << sizeof(Vert) << std::endl;
-	std::cout << "size of array: " << sizeof(Vert) * _verts.size() << std::endl;
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 	for( auto vc : {VertComponent::Position, VertComponent::Colour, VertComponent::Texture, VertComponent::Normal} ) {
 		BindParameter(
 		   	GetBasicShader(),
@@ -25,12 +24,12 @@ void ModelGL::FinaliseLoad() {
 		);
 	}
 
-	std::cout << "vao: " << vao << ", vbo: " << vbo << ", all good!" << std::endl;
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void ModelGL::Draw() const {
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, _verts.size());
 }
 
 void ModelGL::Cleanup() {

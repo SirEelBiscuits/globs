@@ -32,7 +32,8 @@ size_t Vert::getOffset(VertComponent Component) {
 }
 
 int Vert::getElementWidths(VertComponent Component) {
-	return Offsets[AS_INDEX(Component)+1] - Offsets[AS_INDEX(Component)];
+	static int widths[] = {3, 4, 2, 2}; //TODO:: Don't repeat yourself
+	return widths[+Component];
 }
 
 void Vert::list() const {

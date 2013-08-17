@@ -12,5 +12,5 @@
 
 Model* LoadModelFromFile(char const* fileName);
 Model* LoadModelFromBuffer(std::string const& buffer);
-void   addVertsToModel(Model* model, std::vector<char*> verts);
-void   addFaceToModel(Model* model, std::vector<char*> face);
+void   addVertsToModel(ModelGL* model, std::vector<char*> verts);
+void   addFaceToModel(ModelGL* model, std::vector<char*> face);

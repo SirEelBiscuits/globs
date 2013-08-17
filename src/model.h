@@ -17,6 +17,12 @@ public:
 		Count
 	};
 
+	//This is both a container for vertex data, and a provider
+	// of information about its data structure. Do not let these
+	// parts get out of sync.
+	//
+	//This may need abstracting to allow variability per model
+	// in future
 	struct Vert {
 		glm::vec3 v;
 		glm::vec4 c;
@@ -28,6 +34,7 @@ public:
 		static constexpr int getStride();
 		static constexpr int getOffset(VertComponent Component);
 
+		// +1 so the last element contains the stride
 		static constexpr int Offsets[AS_INDEX(VertComponent::Count)+1] = {
 			0,
 			sizeof(glm::vec3),
@@ -44,6 +51,12 @@ public:
 	uint16_t getIndex(unsigned int Index) const;
 	void setIndex(unsigned int Index, uint16_t newValue);
 	void appendIndex(uint16_t newIndex);
+
+	//Once this function is called, any action which will change the size of
+	// the contained arrays will fail, as these can potentially move the data
+	// in memory which can be catastrophic to OpenGL!
+	//
+	//Changing the contents of the arrays is still ok though
 	void Finalise() { _const = true; }
 
 private:

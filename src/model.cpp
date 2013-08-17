@@ -3,7 +3,8 @@
 void Model::list() const {
 	for( auto v : _verts )
 		v.list();
-	for( unsigned int i = 0; i < _indices.size(); ) { // i incremented inside inner loop
+	// i incremented inside inner loop, as faces are stored all smooshed
+	for( unsigned int i = 0; i < _indices.size(); ) {
 		std::cout << "f ";
 		for( int j = 0; j < 3; ++j )
 			std::cout << _indices[i++] << " ";
@@ -28,6 +29,7 @@ void Model::Vert::list() const {
 	std::cout << "}" << std::endl;
 }
 
+//These are for ease of creating debug/release targets later
 #define CONST_CHECK if( !isConst() )
 #define CHECK_ELSE else
 
@@ -65,6 +67,9 @@ void Model::appendIndex(uint16_t newIndex) {
 		_indices.push_back(newIndex);
 	}
 }
+
+#undef CONST_CHECK
+#undef CHECK_ELSE
 
 bool Model::isConst() {
 	// TODO Assert or spew or something?

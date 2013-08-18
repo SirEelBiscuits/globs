@@ -5,15 +5,22 @@
 
 class ModelGL : public Model {
 private:
-	GLuint vbo;
+	GLuint vertData;
+	GLuint indexData;
 	GLuint vao;
+	int    numVerts;
 
 public:
-	virtual void     list() const override;
+	//overrides
+	virtual void list() const override;
+	virtual void Draw() const override;
+	virtual void Cleanup()    override;
+
+	// new methods
 	Vert     getOrCreateVert(unsigned int Index);
 	Vert     getVert(unsigned int Index) const;
 	void     setVert(unsigned int Index, Vert newValue);
-	uint16_t getIndex(unsigned int Index) const;
+	int      getIndex(unsigned int Index) const;
 	void     setIndex(unsigned int Index, uint16_t newValue);
 	void     appendIndex(uint16_t newIndex);
 
@@ -21,15 +28,16 @@ public:
 	// the contained arrays will fail, as these can potentially move the data
 	// in memory which can be catastrophic to OpenGL!
 	//
+	// TODO:: Does all this const shit even need  doing? I think we can just
+	// free the data once it is finalised for a static model
+	//
 	//Changing the contents of the arrays is still ok though
 	void FinaliseLoad();
-	virtual void Draw() const override;
-	virtual void Cleanup() override;
 
 private:
 	bool                   _const = false;
 	std::vector<Vert>      _verts;
-	std::vector<uint16_t>  _indices;
+	std::vector<int>       _indices;
 
 	bool isConst();
 };

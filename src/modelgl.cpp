@@ -7,13 +7,19 @@
 void ModelGL::FinaliseLoad() {
 	_const = true;
 
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vert) * _verts.size(), _verts.data(), GL_STATIC_DRAW);
-
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
-	for( auto vc : {VertComponent::Position, VertComponent::Colour, VertComponent::Texture, VertComponent::Normal} ) {
+
+	glGenBuffers(1, &vertData);
+	glBindBuffer(GL_ARRAY_BUFFER, vertData);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vert) * _verts.size(), _verts.data(), GL_STATIC_DRAW);
+
+	for( auto vc : {
+		VertComponent::Position,
+	       	VertComponent::Colour,
+	       	VertComponent::Texture,
+	       	VertComponent::Normal
+	} ) {
 		BindParameter(
 		   	GetBasicShader(),
 			stringFromVertComponent(vc),
@@ -24,12 +30,24 @@ void ModelGL::FinaliseLoad() {
 		);
 	}
 
+	glGenBuffers(1, &indexData);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * _indices.size(), _indices.data(), GL_STATIC_DRAW);
+
+ 	numVerts = _indices.size();
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void ModelGL::Draw() const {
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, _verts.size());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
+	//glDrawArrays(GL_TRIANGLES, 0, numVerts);
+	glDrawElements(GL_TRIANGLES, numVerts, GL_UNSIGNED_INT, 0);
+
+	glBindVertexArray(0);
 }
 
 void ModelGL::Cleanup() {
@@ -73,7 +91,7 @@ void ModelGL::setVert(unsigned int Index, Vert newValue) {
 	_verts[Index] = newValue; //do your own damn bounds check
 }
 
-uint16_t ModelGL::getIndex(unsigned int Index) const {
+int ModelGL::getIndex(unsigned int Index) const {
 	return _indices[Index];
 }
 

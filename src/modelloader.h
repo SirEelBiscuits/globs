@@ -4,7 +4,7 @@
 #include <fstream>
 
 #include "log.h"
-#include "model.h"
+#include "modelgl.h"
 
 /*
  * For now, this class loads models for openGL usage only :)

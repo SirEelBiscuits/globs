@@ -21,7 +21,6 @@ int main(int argc, char* argv[]) {
 
 	char const* modelsource = "pinwheel.obj";
 	test = LoadModelFromFile(modelsource);
-	test->list();
 
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {

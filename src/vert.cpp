@@ -32,8 +32,12 @@ size_t Vert::getOffset(VertComponent Component) {
 }
 
 int Vert::getElementWidths(VertComponent Component) {
-	static int widths[] = {3, 4, 2, 2}; //TODO:: Don't repeat yourself
-	return widths[+Component];
+	return (Offsets[AS_INDEX(Component) + 1] - Offsets[AS_INDEX(Component)])
+		//this is ugly, and assumes that vec[2,3,4] have the same underlying type
+		// which I think is true. It would be better to pull the relevant type from
+		// the glm library, but the documentation is less than helpful, and the
+		// source is unreadable
+		/ sizeof(decltype(v.x));
 }
 
 void Vert::list() const {

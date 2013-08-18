@@ -12,7 +12,6 @@ private:
 
 public:
 	//overrides
-	virtual void list() const override;
 	virtual void Draw() const override;
 	virtual void Cleanup()    override;
 
@@ -24,21 +23,14 @@ public:
 	void     setIndex(unsigned int Index, uint16_t newValue);
 	void     appendIndex(uint16_t newIndex);
 
-	//Once this function is called, any action which will change the size of
-	// the contained arrays will fail, as these can potentially move the data
-	// in memory which can be catastrophic to OpenGL!
+	//This will put all the data in the vectors into openGL's memory,
+	// and clear the arrays here
 	//
-	// TODO:: Does all this const shit even need  doing? I think we can just
-	// free the data once it is finalised for a static model
-	//
-	//Changing the contents of the arrays is still ok though
+	//TODO separate objects for pre and post FinaliseLoad?
 	void FinaliseLoad();
 
 private:
-	bool                   _const = false;
 	std::vector<Vert>      _verts;
 	std::vector<int>       _indices;
-
-	bool isConst();
 };
 

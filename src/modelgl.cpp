@@ -5,8 +5,6 @@
 #include <iostream>
 
 void ModelGL::FinaliseLoad() {
-	_const = true;
-
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -39,6 +37,11 @@ void ModelGL::FinaliseLoad() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	_verts.clear();
+	_verts.shrink_to_fit();
+	_indices.clear();
+	_indices.shrink_to_fit();
 }
 
 void ModelGL::Draw() const {
@@ -51,33 +54,15 @@ void ModelGL::Draw() const {
 }
 
 void ModelGL::Cleanup() {
-
+	glDeleteBuffers(1, &vertData);
+	glDeleteBuffers(1, &indexData);
+	glDeleteVertexArrays(1, &vao);
 }
-
-void ModelGL::list() const {
-	for(auto v : _verts)
-		v.list();
-	// i incremented inside inner loop, as faces are stored all smooshed
-	for(unsigned int i = 0; i < _indices.size();) {
-		std::cout << "f ";
-		for(int j = 0; j < 3; ++j)
-			std::cout << _indices[i++] << " ";
-		std::cout << std::endl;
-	}
-}
-
-//These are for ease of creating debug/release targets later
-#define CONST_CHECK if(!isConst())
-#define CHECK_ELSE else
 
 Vert ModelGL::getOrCreateVert(unsigned int Index) {
 	if(Index >= _verts.size()) {
-		CONST_CHECK {
-			_verts.resize(Index + 1);
-			return _verts[Index];
-		}
-		CHECK_ELSE
-			return _verts[0];
+		_verts.resize(Index + 1);
+		return _verts[Index];
 	}
 	return _verts[Index];
 }
@@ -87,7 +72,6 @@ Vert ModelGL::getVert(unsigned int Index) const {
 }
 
 void ModelGL::setVert(unsigned int Index, Vert newValue) {
-	//no const check - shouldn't be able to affect vector size
 	_verts[Index] = newValue; //do your own damn bounds check
 }
 
@@ -100,15 +84,6 @@ void ModelGL::setIndex(unsigned int Index, uint16_t newValue) {
 }
 
 void ModelGL::appendIndex(uint16_t newIndex) {
-	CONST_CHECK {
-		_indices.push_back(newIndex);
-	}
+	_indices.push_back(newIndex);
 }
 
-#undef CONST_CHECK
-#undef CHECK_ELSE
-
-bool ModelGL::isConst() {
-	// TODO Assert or spew or something?
-	return _const;
-}

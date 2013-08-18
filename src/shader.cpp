@@ -28,7 +28,7 @@ GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType) {
 		std::string log;
 		log.reserve(length);
 		glGetShaderInfoLog(shader, log.size(), nullptr, const_cast<char*>(log.data()));
-		Logger::log("Shader", log);
+		Logger::log("Shader", "Log reads: %s", log.c_str());
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -93,8 +93,8 @@ GLuint GetBasicShader(bool force) {
 	if(BasicShader != static_cast<GLuint>(-1) && !force)
 		return BasicShader;
 
-	Logger::log("Shader", frag);
-	Logger::log("Shader", vert);
+	Logger::log("Shader", "Loaded fragment shader: \n%s\nEOF\n", frag.c_str());
+	Logger::log("Shader", "Loaded vertex shader: \n%s\nEOF\n", vert.c_str());
 
 	GLuint VS = LoadShaderFromBuffer(vert, GL_VERTEX_SHADER);
 	GLuint FS = LoadShaderFromBuffer(frag, GL_FRAGMENT_SHADER);

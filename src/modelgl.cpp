@@ -4,13 +4,19 @@
 
 #include <iostream>
 
+#define LOG "ModelGL"
+
 void ModelGL::FinaliseLoad() {
+	Logger::log(LOG, "Sending model data to GL");
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
+	Logger::log(LOG,"Allocating vertex store size: %d", sizeof(Vert) * _verts.size());
 	glGenBuffers(1, &vertData);
 	glBindBuffer(GL_ARRAY_BUFFER, vertData);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vert) * _verts.size(), _verts.data(), GL_STATIC_DRAW);
+
+	Logger::log(LOG,"Initialising shader params");
 
 	for( auto vc : {
 		VertComponent::Position,
@@ -28,6 +34,7 @@ void ModelGL::FinaliseLoad() {
 		);
 	}
 
+	Logger::log(LOG, "Initialising element array size: %d", sizeof(int) * _indices.size());
 	glGenBuffers(1, &indexData);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * _indices.size(), _indices.data(), GL_STATIC_DRAW);
@@ -38,25 +45,28 @@ void ModelGL::FinaliseLoad() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+	Logger::log(LOG, "Freeing memory...");
 	_verts.clear();
 	_verts.shrink_to_fit();
 	_indices.clear();
 	_indices.shrink_to_fit();
+	Logger::log(LOG, "all done");
 }
 
 void ModelGL::Draw() const {
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
-	//glDrawArrays(GL_TRIANGLES, 0, numVerts);
 	glDrawElements(GL_TRIANGLES, numVerts, GL_UNSIGNED_INT, 0);
-
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
 
 void ModelGL::Cleanup() {
+	Logger::log(LOG, "Cleaning up model");
 	glDeleteBuffers(1, &vertData);
 	glDeleteBuffers(1, &indexData);
 	glDeleteVertexArrays(1, &vao);
+	Logger::log(LOG, "Done");
 }
 
 Vert ModelGL::getOrCreateVert(unsigned int Index) {

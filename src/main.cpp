@@ -53,7 +53,7 @@ void Init(int argc, char* argv[]) {
 	Logger::log("INFO", "Initialising logger");
 	if(Gargamel::ArgumentSet[LogFile].isArgumentPresent) {
 		if(!Logger::setFileName(Gargamel::ArgumentSet[LogFile].argumentValue)) {
-			Logger::log("ERR", "Failed to open log file");
+			Logger::log("ERR", "Failed to open log file (%s)", Gargamel::ArgumentSet[LogFile].argumentValue);
 		}
 	}
 	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {

@@ -93,6 +93,7 @@ void addFaceToModel(ModelGL* model, std::vector<const char*> face) {
 Model* LoadModelFromFile(char const* fileName) {
 	std::string buf;
 	ReadFile(fileName, buf);
+	Logger::log(LOG, "Loading model %s", fileName);
 	return LoadModelFromBuffer(buf);
 }
 
@@ -142,6 +143,7 @@ Model* LoadModelFromBuffer(std::string const& buffer) {
 			addFaceToModel(ret, vec);
 		}
 	}
+	Logger::log(LOG, "Finished loading model");
 
 	ret->FinaliseLoad();
 	return ret;

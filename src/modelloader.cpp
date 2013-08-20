@@ -194,12 +194,6 @@ void FinaliseLoad(
 	Logger::log(LOG, "all done");
 }
 
-void dump( std::vector<Vert> verts) {
-	for(auto v : verts) {
-		v.list();
-	}
-}
-
 Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	/*
 	 * METHOD:
@@ -252,7 +246,6 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	Logger::log(LOG, "Finished loading model");
 
 	GLuint vao, vertHandle, indexHandle;
-	dump(vertList);
 	FinaliseLoad(vertList, indexList, vao, vertHandle, indexHandle);
 	ModelGL* ret = new ModelGL(vao, vertHandle, indexHandle, indexList.size());
 	return ret;

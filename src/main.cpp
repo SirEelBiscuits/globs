@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 	Model* test;
 
 	char const* modelsource = "pinwheel.obj";
-	test = LoadModelFromFile(modelsource);
+	test = ModelLoader::LoadModelFromFile(modelsource);
 
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {

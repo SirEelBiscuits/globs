@@ -65,11 +65,11 @@ GLuint CreateProgram(char const* vertFile, char const* fragFile) {
 std::string frag(
 R"(#version 150
 
-in vec4 color_from_vshader;
-out vec4 out_color;
+in vec4 colour_from_vshader;
+out vec4 out_colour;
 
 void main() {
-	out_color = color_from_vshader;
+	out_colour = colour_from_vshader;
 })"
 );
 
@@ -77,12 +77,12 @@ std::string vert(
 R"(#version 150
 
 in vec4 position;
-in vec4 color;
-out vec4 color_from_vshader;
+in vec4 colour;
+out vec4 colour_from_vshader;
 
 void main() {
 	gl_Position = position;
-	color_from_vshader = color;
+	colour_from_vshader = colour;
 })"
 );
 
@@ -109,6 +109,7 @@ GLuint BindParameter(
        	GLsizei stride,
 	GLvoid* offset
 ) {
+	Logger::log("Shader", "Binding parameter '%s', size: %d, stride: %d, offset: %d", name, size, stride, offset);
 	GLint position = glGetAttribLocation(program, name);
 	glVertexAttribPointer(position, size, type, GL_FALSE, stride, offset);
 	glEnableVertexAttribArray(position);

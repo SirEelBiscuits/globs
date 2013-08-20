@@ -1,9 +1,9 @@
 #version 150
 
-in vec4 color_from_vshader;
-out vec4 out_color;
+in vec4 colour_from_vshader;
+out vec4 out_colour;
 
 void main() {
-	out_color = color_from_vshader;
+	out_colour = colour_from_vshader;
 }
 

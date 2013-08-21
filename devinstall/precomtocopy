@@ -2,8 +2,10 @@
 
 git stash --keep-index -q
 
-return=`../../install/pre-commit`
+devinstall/pre-commit
+result=$?
 
-get stash pop -q
+git stash pop -q
 
-exit $return
+[ $result -ne 0 ] && exit 1
+exit 0

@@ -1,6 +1,9 @@
 #!/bin/bash
 
-mkdir ../intermediate
-cp precomtocopy ../.git/hooks/pre-commit
-git submodule init ../src/gargamel
-git submodule update ../src/gargamel
+cd $(0%/*)
+cd ..
+
+mkdir intermediate
+cp precomtocopy .git/hooks/pre-commit
+git submodule init src/gargamel
+git submodule update src/gargamel

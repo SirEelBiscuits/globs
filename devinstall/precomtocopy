@@ -1,0 +1,9 @@
+#!/bin/bash
+
+git stash --keep-index -q
+
+return=`../../install/pre-commit`
+
+get stash pop -q
+
+exit $return

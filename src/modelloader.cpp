@@ -35,6 +35,14 @@ Vert getOrCreateVert(std::vector<Vert>& vec, unsigned int Index) {
 	return vec[Index];
 }
 
+glm::vec2 vec2FromStringArray(std::vector<const char*> verts) {
+	glm::vec2 ret;
+	for(int i = 0; i < 2; ++i) {
+		ret[i] = atof(verts[i]);
+	}
+	return ret;
+}
+
 glm::vec3 vec3FromStringArray(std::vector<const char*> verts) {
 	glm::vec3 ret;
 	for(int i = 0; i < 3; ++i) {
@@ -54,58 +62,10 @@ glm::vec4 vec4FromStringArray(std::vector<const char*> values) {
 	return ret;
 }
 
-bool readVertex(std::string line, std::vector<const char*>& outStrings) {
-	/* METHOD:
-	 * line should be of the form
-	 * "v $FLOAT $FLOAT $FLOAT"
-	 */
-	char const* cur = line.c_str();
-
-	if(*cur != 'v')
-		return false;
-	++cur;
-	if(terminatesLine(cur) || *cur > ' ')
-		return false;
-	cur = munchWhitespace(cur);
-
-	std::vector<const char*> ret;
-	for(int i = 0; i < 3; ++i) {
-		if(terminatesLine(cur))
-			return false;
-		ret.push_back(cur);
-		cur = findWhitespace(cur);
-		cur = munchWhitespace(cur);
-	}
-	outStrings = ret;
-	return true;
-}
-
 void addVertToModel(std::vector<Vert>& outVec, int index, std::vector<const char*> verts) {
 	Vert vert = getOrCreateVert(outVec, index);
 	vert.v = vec3FromStringArray(verts);
 	outVec[index] = vert;
-}
-
-bool readColour(std::string line, std::vector<const char*>& outStrings) {
-	char const* cur = line.c_str();
-
-	if(*cur != 'c')
-		return false;
-	++cur;
-	if(terminatesLine(cur) || *cur > ' ')
-		return false;
-	cur = munchWhitespace(cur);
-
-	std::vector<const char*> ret;
-	for(int i = 0; i < 4; ++i) {
-		if(terminatesLine(cur))
-			return false;
-		ret.push_back(cur);
-		cur = findWhitespace(cur);
-		cur = munchWhitespace(cur);
-	}
-	outStrings = ret;
-	return true;
 }
 
 void addColourToModel(std::vector<Vert>& outVec, int index, std::vector<const char*> verts) {
@@ -114,10 +74,25 @@ void addColourToModel(std::vector<Vert>& outVec, int index, std::vector<const ch
 	outVec[index] = vert;
 }
 
-bool readFace(std::string line, std::vector<const char*>& outStrings) {
+void addTextureCoordToModel(std::vector<Vert>& outVec, int index, std::vector<const char*> verts) {
+	Vert vert = getOrCreateVert(outVec, index);
+	vert.t = vec2FromStringArray(verts);
+	outVec[index] = vert;
+}
+
+void addFaceToModel(std::vector<GLuint>& outIndices, std::vector<const char*> face) {
+	for(auto v : face)
+		outIndices.push_back(atoi(v));
+}
+
+bool readObjectLine(
+	char lineType,
+	std::string line,
+	std::vector<const char*>& outStrings
+) {
 	char const* cur = line.c_str();
 
-	if(*cur != 'f')
+	if(*cur != lineType)
 		return false;
 	++cur;
 	if(terminatesLine(cur) || *cur > ' ')
@@ -135,9 +110,29 @@ bool readFace(std::string line, std::vector<const char*>& outStrings) {
 	return true;
 }
 
-void addFaceToModel(std::vector<GLuint>& outIndices, std::vector<const char*> face) {
-	for(auto v : face)
-		outIndices.push_back(atoi(v));
+bool readObjectLine(
+	char lineType,
+	int numElements,
+	std::string line,
+	std::vector<const char*>& outStrings
+) {
+	char const* cur = line.c_str();
+	if(*cur != lineType);
+	++cur;
+	if(terminatesLine(cur) || *cur > ' ')
+		return false;
+	cur = munchWhitespace(cur);
+
+	std::vector<const char*> ret;
+	for( int i = 0; i < numElements; ++i ) {
+		if(terminatesLine(cur))
+			return false;
+		ret.push_back(cur);
+		cur = findWhitespace(cur);
+		cur = munchWhitespace(cur);
+	}
+	outStrings = ret;
+	return true;
 }
 
 Model* ModelLoader::LoadModelFromFile(char const* fileName) {
@@ -166,19 +161,19 @@ void FinaliseLoad(
 	Logger::log(LOG,"Initialising shader params");
 
 	for( auto vc : {
-		VertComponent::Position,
-	       	VertComponent::Colour,
-	       	VertComponent::Texture,
-	       	VertComponent::Normal
-	} ) {
+			VertComponent::Position,
+			VertComponent::Colour,
+			VertComponent::Texture,
+			VertComponent::Normal
+			} ) {
 		BindParameter(
-		   	GetBasicShader(),
-			stringFromVertComponent(vc),
-			Vert::getElementWidths(vc),
-			GL_FLOAT,
-			Vert::getStride(),
-			(GLvoid*)Vert::getOffset(vc)
-		);
+				GetBasicShader(),
+				stringFromVertComponent(vc),
+				Vert::getElementWidths(vc),
+				GL_FLOAT,
+				Vert::getStride(),
+				(GLvoid*)Vert::getOffset(vc)
+			     );
 	}
 
 	Logger::log(LOG, "Initialising element array size: %d", sizeof(int) * indices.size());
@@ -218,26 +213,32 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	size_t curPos = 0;
 	int curVertIndex = 0;
 	int curColourIndex = 0;
+	int curTextureIndex = 0;
 	while( curPos < buffer.size()) {
 		size_t nextPos = buffer.find('\n', curPos);
 		std::string curLine(buffer, curPos, nextPos);
 		curPos = nextPos + 1;
 
 		std::vector<const char*> vec(4); // no more than 4 elements anticipated
-		if(readVertex(curLine, vec)) {
+		if(readObjectLine('v', 3, curLine, vec)) {
 			Logger::log(LOG, "found vert");
 			addVertToModel(vertList, curVertIndex, vec);
 			++curVertIndex;
 		}
-		if(readColour(curLine, vec)) {
+		if(readObjectLine('c', 4, curLine, vec)) {
 			Logger::log(LOG, "found colour");
 			addColourToModel(vertList, curColourIndex, vec);
 			++curColourIndex;
 		}
+		if(readObjectLine('t', 2, curLine, vec)) {
+			Logger::log(LOG, "found texture coord");
+			addTextureCoordToModel(vertList, curTextureIndex, vec);
+			++curTextureIndex;
+		}
 
 		//faces work a little differently, because while order dependent,
 		// there is no interdependence (ie, v and c lines need to be matched up)
-		if(readFace(curLine, vec)) {
+		if(readObjectLine('f', curLine, vec)) {
 			Logger::log(LOG, "found face");
 			addFaceToModel(indexList, vec);
 		}

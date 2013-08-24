@@ -114,7 +114,8 @@ bool readObjectLine(
 	std::vector<const char*>& outStrings
 ) {
 	char const* cur = line.c_str();
-	if(*cur != lineType);
+	if(*cur != lineType)
+		return false;
 	++cur;
 	if(terminatesLine(cur) || *cur > ' ')
 		return false;
@@ -213,7 +214,7 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	int curTextureIndex = 0;
 	while( curPos < buffer.size()) {
 		size_t nextPos = buffer.find('\n', curPos);
-		std::string curLine(buffer, curPos, nextPos);
+		std::string curLine(buffer, curPos, nextPos - curPos);
 		curPos = nextPos + 1;
 
 		std::vector<const char*> vec(4); // no more than 4 elements anticipated

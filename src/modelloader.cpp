@@ -84,24 +84,22 @@ void addFaceToModel(std::vector<GLuint>& outIndices, std::vector<const char*> fa
 
 bool readObjectLine(
 	char const lineType,
-	std::string line,
+	char const* line,
 	std::vector<const char*>& outStrings
 ) {
-	char const* cur = line.c_str();
-
-	if(*cur != lineType)
+	if(*line != lineType)
 		return false;
-	++cur;
-	if(terminatesLine(cur) || *cur > ' ')
+	++line;
+	if(terminatesLine(line) || *line > ' ')
 		return false;
-	cur = munchWhitespace(cur);
+	line = munchWhitespace(line);
 
 	std::vector<const char*> ret;
 
-	while(!terminatesLine(cur)) {
-		ret.push_back(cur);
-		cur = findWhitespace(cur);
-		cur = munchWhitespace(cur);
+	while(!terminatesLine(line)) {
+		ret.push_back(line);
+		line = findWhitespace(line);
+		line = munchWhitespace(line);
 	}
 	outStrings = ret;
 	return true;
@@ -110,24 +108,23 @@ bool readObjectLine(
 bool readObjectLine(
 	char const lineType,
 	int const numElements,
-	std::string line,
+	char const* line,
 	std::vector<const char*>& outStrings
 ) {
-	char const* cur = line.c_str();
-	if(*cur != lineType)
+	if(*line != lineType)
 		return false;
-	++cur;
-	if(terminatesLine(cur) || *cur > ' ')
+	++line;
+	if(terminatesLine(line) || *line > ' ')
 		return false;
-	cur = munchWhitespace(cur);
+	line = munchWhitespace(line);
 
 	std::vector<const char*> ret;
 	for( int i = 0; i < numElements; ++i ) {
-		if(terminatesLine(cur))
+		if(terminatesLine(line))
 			return false;
-		ret.push_back(cur);
-		cur = findWhitespace(cur);
-		cur = munchWhitespace(cur);
+		ret.push_back(line);
+		line = findWhitespace(line);
+		line = munchWhitespace(line);
 	}
 	outStrings = ret;
 	return true;
@@ -201,8 +198,6 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	 * comprehend 'f' lines, with n verts
 	 */
 
-	//::TODO:: curLine is crap, probably should be using char const*
-	std::string curLine;
 	std::vector<Vert> vertList;
 	std::vector<GLuint> indexList;
 
@@ -213,22 +208,20 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	int curColourIndex = 0;
 	int curTextureIndex = 0;
 	while( curPos < buffer.size()) {
-		size_t nextPos = buffer.find('\n', curPos);
-		std::string curLine(buffer, curPos, nextPos - curPos);
-		curPos = nextPos + 1;
-
+		char const* curLine = buffer.c_str() + curPos;
 		std::vector<const char*> vec(4); // no more than 4 elements anticipated
+
 		if(readObjectLine('v', 3, curLine, vec)) {
 			Logger::log(LOG, "found vert");
 			addVertToModel(vertList, curVertIndex, vec);
 			++curVertIndex;
 		}
-		if(readObjectLine('c', 4, curLine, vec)) {
+		else if(readObjectLine('c', 4, curLine, vec)) {
 			Logger::log(LOG, "found colour");
 			addColourToModel(vertList, curColourIndex, vec);
 			++curColourIndex;
 		}
-		if(readObjectLine('t', 2, curLine, vec)) {
+		else if(readObjectLine('t', 2, curLine, vec)) {
 			Logger::log(LOG, "found texture coord");
 			addTextureCoordToModel(vertList, curTextureIndex, vec);
 			++curTextureIndex;
@@ -236,10 +229,11 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 
 		//faces work a little differently, because while order dependent,
 		// there is no interdependence (ie, v and c lines need to be matched up)
-		if(readObjectLine('f', curLine, vec)) {
+		else if(readObjectLine('f', curLine, vec)) {
 			Logger::log(LOG, "found face");
 			addFaceToModel(indexList, vec);
 		}
+		curPos = buffer.find('\n', curPos) + 1;
 	}
 
 	Logger::log(LOG, "Finished loading model");

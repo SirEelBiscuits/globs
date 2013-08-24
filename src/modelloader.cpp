@@ -52,9 +52,6 @@ glm::vec3 vec3FromStringArray(std::vector<const char*> verts) {
 }
 
 glm::vec4 vec4FromStringArray(std::vector<const char*> values) {
-
-	//faces work a little differently, because while order dependent,
-	// there is no interdependence (ie, v and c lines need to be matched up)
 	glm::vec4 ret;
 	for(int i = 0; i < 4; ++i) {
 		ret[i] = atof(values[i]);
@@ -86,7 +83,7 @@ void addFaceToModel(std::vector<GLuint>& outIndices, std::vector<const char*> fa
 }
 
 bool readObjectLine(
-	char lineType,
+	char const lineType,
 	std::string line,
 	std::vector<const char*>& outStrings
 ) {
@@ -111,8 +108,8 @@ bool readObjectLine(
 }
 
 bool readObjectLine(
-	char lineType,
-	int numElements,
+	char const lineType,
+	int const numElements,
 	std::string line,
 	std::vector<const char*>& outStrings
 ) {
@@ -161,19 +158,19 @@ void FinaliseLoad(
 	Logger::log(LOG,"Initialising shader params");
 
 	for( auto vc : {
-			VertComponent::Position,
-			VertComponent::Colour,
-			VertComponent::Texture,
-			VertComponent::Normal
-			} ) {
+		VertComponent::Position,
+		VertComponent::Colour,
+		VertComponent::Texture,
+		VertComponent::Normal
+	} ) {
 		BindParameter(
-				GetBasicShader(),
-				stringFromVertComponent(vc),
-				Vert::getElementWidths(vc),
-				GL_FLOAT,
-				Vert::getStride(),
-				(GLvoid*)Vert::getOffset(vc)
-			     );
+			GetBasicShader(),
+			stringFromVertComponent(vc),
+			Vert::getElementWidths(vc),
+			GL_FLOAT,
+			Vert::getStride(),
+			(GLvoid*)Vert::getOffset(vc)
+		);
 	}
 
 	Logger::log(LOG, "Initialising element array size: %d", sizeof(int) * indices.size());

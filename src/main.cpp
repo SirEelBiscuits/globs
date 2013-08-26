@@ -12,8 +12,6 @@
 #include "modelloader.h"
 #include "model.h"
 
-#include <IL/il.h>
-
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
 
@@ -90,9 +88,5 @@ void Init(int argc, char* argv[]) {
 		Logger::log("ERR", "Failed to start GLEW");
 		exit(EXIT_FAILURE);
 	}
-
-	Logger::log("INFO", "Starting devIL");
-	ilInit();
-
 	Logger::log("INFO", "Initialisation Complete");
 }

@@ -1,6 +1,4 @@
-#define GLEW_STATIC
-#include <GL/glew.h>
-#include <GL/glfw.h>
+#include "glwrapper.h"
 
 #include "shader.h"
 #include "log.h"
@@ -66,10 +64,13 @@ std::string frag(
 R"(#version 150
 
 in vec4 colour_from_vshader;
+in vec2 texture_from_vshader;
 out vec4 out_colour;
 
+uniform sampler2D texture_sampler;
+
 void main() {
-	out_colour = colour_from_vshader;
+	out_colour = texture(texture_sampler, texture_from_vshader);
 })"
 );
 
@@ -80,9 +81,13 @@ in vec4 position;
 in vec4 colour;
 out vec4 colour_from_vshader;
 
+in vec2 texture;
+out vec2 texture_from_vshader;
+
 void main() {
 	gl_Position = position;
 	colour_from_vshader = colour;
+	texture_from_vshader = texture;
 })"
 );
 
@@ -98,7 +103,10 @@ GLuint GetBasicShader(bool force) {
 
 	GLuint VS = LoadShaderFromBuffer(vert, GL_VERTEX_SHADER);
 	GLuint FS = LoadShaderFromBuffer(frag, GL_FRAGMENT_SHADER);
-	return BasicShader = CreateProgramFromShaders(VS, FS);
+
+	BasicShader = CreateProgramFromShaders(VS, FS);
+	LOG_GL_ERRORS;
+	return BasicShader;
 }
 
 GLuint BindParameter(
@@ -113,5 +121,6 @@ GLuint BindParameter(
 	GLint position = glGetAttribLocation(program, name);
 	glVertexAttribPointer(position, size, type, GL_FALSE, stride, offset);
 	glEnableVertexAttribArray(position);
+	LOG_GL_ERRORS;
 	return position;
 }

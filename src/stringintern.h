@@ -9,8 +9,11 @@ class StringIntern {
 public:
 	static std::vector<std::string> s_strings;
 	static StringIntern Create(std::string fromString);
+
+	StringIntern(std::string fromString);
 private:
 	static void AddString(std::string toAdd);
+	static int const CreateInternal(std::string fromString);
 
 	//non-static parts:
 public:

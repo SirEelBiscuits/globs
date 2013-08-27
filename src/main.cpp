@@ -11,14 +11,24 @@
 #include "log.h"
 #include "modelloader.h"
 #include "model.h"
+#include "texture.h"
+#include "textureloader.h"
 
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
 
 	Model* test;
 
-	char const* modelsource = "pinwheel.obj";
+	LOG_GL_ERRORS;
+	Logger::log("INFO", "loading model assets");
+	char const* modelsource = "square.obj";
 	test = ModelLoader::LoadModelFromFile(modelsource);
+	LOG_GL_ERRORS;
+
+	Logger::log("INFO", "loading texture assets");
+	Texture* tex = TextureLoader::LoadTextureFromFile("test.jpg");
+	tex->set();
+	LOG_GL_ERRORS;
 
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {
@@ -80,6 +90,7 @@ void Init(int argc, char* argv[]) {
 		Logger::log("ERR", "Failed to open window");
 		exit(EXIT_FAILURE);
 	}
+	LOG_GL_ERRORS;
 
 	Logger::log("INFO", "Starting GLEW");
 	glewExperimental = GL_TRUE;
@@ -88,5 +99,6 @@ void Init(int argc, char* argv[]) {
 		Logger::log("ERR", "Failed to start GLEW");
 		exit(EXIT_FAILURE);
 	}
+	LOG_GL_ERRORS;
 	Logger::log("INFO", "Initialisation Complete");
 }

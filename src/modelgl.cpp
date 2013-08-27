@@ -19,6 +19,7 @@ void ModelGL::Draw() const {
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	LOG_GL_ERRORS;
 }
 
 void ModelGL::Cleanup() {
@@ -27,5 +28,6 @@ void ModelGL::Cleanup() {
 	glDeleteBuffers(1, &indexData);
 	glDeleteVertexArrays(1, &vao);
 	Logger::log(LOG, "Done");
+	LOG_GL_ERRORS;
 }
 

@@ -152,6 +152,7 @@ void FinaliseLoad(
 	glGenBuffers(1, &vertData);
 	glBindBuffer(GL_ARRAY_BUFFER, vertData);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vert) * verts.size(), verts.data(), GL_STATIC_DRAW);
+	LOG_GL_ERRORS;
 
 	Logger::log(LOG,"Initialising shader params");
 
@@ -169,17 +170,20 @@ void FinaliseLoad(
 			Vert::getStride(),
 			(GLvoid*)Vert::getOffset(vc)
 		);
+		LOG_GL_ERRORS;
 	}
 
 	Logger::log(LOG, "Initialising element array size: %d", sizeof(int) * indices.size());
 	glGenBuffers(1, &indexData);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * indices.size(), indices.data(), GL_STATIC_DRAW);
-	Logger::log(LOG, "Data all uploaded, cleanup time.");
+	LOG_GL_ERRORS;
 
+	Logger::log(LOG, "Data all uploaded, cleanup time.");
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	LOG_GL_ERRORS;
 
 	Logger::log(LOG, "all done");
 }

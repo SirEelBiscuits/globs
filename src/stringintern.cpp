@@ -3,17 +3,25 @@
 std::vector<std::string> StringIntern::s_strings;
 
 StringIntern StringIntern::Create(std::string fromString) {
+	return StringIntern(CreateInternal(fromString));
+}
+
+int const StringIntern::CreateInternal(std::string fromString) {
 	for( int i = s_strings.size() - 1; i >= 0; --i ) {
 		if( s_strings[i].compare( fromString ) == 0 ) {
-			return StringIntern(i);
+			return i;
 		}
 	}
 	s_strings.push_back(fromString);
-	return StringIntern(s_strings.size() - 1);
+	return s_strings.size() - 1;
 }
 
 StringIntern::StringIntern(int idx)
 	: idx(idx)
+{}
+
+StringIntern::StringIntern(std::string fromString)
+	: idx(CreateInternal(fromString))
 {}
 
 bool StringIntern::operator==(StringIntern& rhs) const {

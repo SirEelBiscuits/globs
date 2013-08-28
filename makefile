@@ -13,18 +13,18 @@ OUTDIR = bin
 CPP_FILES := $(wildcard $(SRCDIR)/*.cpp)
 OBJS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(CPP_FILES))
 LIBBASE = Z:\\Windows\\ManualInstalls\\dev-libs
-CC = g++
-CPPFLAGS = -Wall -pedantic -std=c++11 -I$(LIBBASE)\\include -static-libgcc -static-libstdc++
-LDFLAGS = -L$(LIBBASE)\\lib -lGLFW -lglew32s -lopengl32 -lglu32 -lDevIL -lILU -lILUT
+CXX = g++
+CPPFLAGS += -Wall -pedantic -std=c++11 -I$(LIBBASE)\\include -static-libgcc -static-libstdc++
+LDFLAGS += -L$(LIBBASE)\\lib -lGLFW -lglew32s -lopengl32 -lglu32 -lDevIL -lILU -lILUT
  
 all: version $(PROGRAM) 
  
 $(PROGRAM): .depend $(OBJS)
-	$(CC) $(CPPFLAGS) $(OBJS) $(LDFLAGS) -o $(OUTDIR)/$(PROGRAM)
+	$(CXX) $(CPPFLAGS) $(OBJS) $(LDFLAGS) -o $(OUTDIR)/$(PROGRAM)
  
 depend: .depend
  
-.depend: cmd = g++ -MM -MF depend $(var); cat depend >> .depend;
+.depend: cmd = $(CXX) -std=c++11 -MM -MF depend $(var); cat depend >> .depend;
 .depend:
 	@echo "Generating dependencies..."
 	@$(foreach var, $(CPP_FILES), $(cmd))
@@ -39,10 +39,10 @@ version:
 # variables used here, the variable $* that matches whatever % stands for
 # can be useful in special cases.
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	$(CC) $(CPPFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) -c $< -o $@
  
 %: %.cpp
-	$(CC) $(CPPFLAGS) -o $@ $<
+	$(CXX) $(CPPFLAGS) -o $@ $<
  
 clean:
 	rm -f .depend $(OBJDIR)/*.o $(OUTDIR)/$(PROGRAM)

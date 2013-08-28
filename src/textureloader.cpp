@@ -3,9 +3,9 @@
 #include "textureloader.h"
 
 #include "texturegl.h"
-#include "IL/il.h"
-#include "IL/ilu.h"
-#include "IL/ilut.h"
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include <IL/ilut.h>
 
 #include "log.h"
 

@@ -11,11 +11,11 @@
 GLuint LoadShader(char const* file, GLenum shaderType);
 
 /*
- *  * @brief Load a shader from an in-memory buffer
- *   * @param buffer is the string containing the data
- *    * @param shaderType indicates the type of shader
- *     * @return The shader handle
- *      */
+ * @brief Load a shader from an in-memory buffer
+ * @param buffer is the string containing the data
+ * @param shaderType indicates the type of shader
+ * @return The shader handle
+ */
 GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType);
 
 /*
@@ -46,3 +46,8 @@ GLuint BindParameter(
        	GLsizei stride,
 	GLvoid* offset
 );
+
+/*
+ * sets up a single texture sampler
+ */
+void BindTextureSampler(GLuint program, char const* samplerName, GLuint textureUnit);

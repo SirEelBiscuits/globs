@@ -90,6 +90,7 @@ void Init(int argc, char* argv[]) {
 		Logger::log("ERR", "Failed to open window");
 		exit(EXIT_FAILURE);
 	}
+	Logger::log("INFO", "GL version: %s", glGetString(GL_VERSION));
 	LOG_GL_ERRORS;
 
 	Logger::log("INFO", "Starting GLEW");
@@ -99,6 +100,7 @@ void Init(int argc, char* argv[]) {
 		Logger::log("ERR", "Failed to start GLEW");
 		exit(EXIT_FAILURE);
 	}
+	Logger::log("INFO", "GLEW version: %s", glewGetString(GLEW_VERSION));
 	LOG_GL_ERRORS;
 	Logger::log("INFO", "Initialisation Complete");
 }

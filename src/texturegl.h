@@ -11,4 +11,5 @@ public:
 	TextureGL(GLuint handle);
 private:
 	GLuint const handle;
+	GLuint const textureUnitToUse;
 };

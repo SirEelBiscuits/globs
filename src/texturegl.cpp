@@ -4,6 +4,7 @@
 
 TextureGL::TextureGL(GLuint handle)
 	: handle(handle)
+	, textureUnitToUse(0)
 {}
 
 void TextureGL::cleanup() {
@@ -13,7 +14,5 @@ void TextureGL::cleanup() {
 void TextureGL::set() const {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, handle);
-	int texLocation = glGetUniformLocation(GetBasicShader(), "texture_sampler");
-	glUniform1i(texLocation, 0);
 	LOG_GL_ERRORS;
 }

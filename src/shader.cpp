@@ -70,7 +70,7 @@ out vec4 out_colour;
 uniform sampler2D texture_sampler;
 
 void main() {
-	out_colour = texture(texture_sampler, texture_from_vshader);
+	out_colour = colour_from_vshader * texture(texture_sampler, texture_from_vshader);
 })"
 );
 
@@ -123,4 +123,13 @@ GLuint BindParameter(
 	glEnableVertexAttribArray(position);
 	LOG_GL_ERRORS;
 	return position;
+}
+
+void BindTextureSampler(
+	GLuint program,
+	char const* samplerName,
+	GLuint textureUnit
+) {
+	glUniform1i(glGetUniformLocation(program, samplerName), textureUnit);
+	LOG_GL_ERRORS;
 }

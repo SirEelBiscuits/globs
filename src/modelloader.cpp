@@ -173,6 +173,8 @@ void FinaliseLoad(
 		LOG_GL_ERRORS;
 	}
 
+	BindTextureSampler(GetBasicShader(), "texture_sampler", 0);
+
 	Logger::log(LOG, "Initialising element array size: %d", sizeof(int) * indices.size());
 	glGenBuffers(1, &indexData);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);

@@ -11,6 +11,8 @@
 
 #include "stringintern.h"
 
+#include "glm.h"
+
 Texture* TextureLoader::LoadTextureFromFile(char const* fileName) {
 	CLEAR_GL_ERRORS
 	static StringIntern const log("Texture");
@@ -34,24 +36,17 @@ Texture* TextureLoader::LoadTextureFromFile(char const* fileName) {
 	}
 	Logger::log(log.toString(), "complete");
 
-	Logger::log(log.toString(), "Initialising openGL texture");
-	GLuint tex;
-	glGenTextures(1, &tex);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	LOG_GL_ERRORS;
-
 	Logger::log(log.toString(), "Setting up mipmaps (via devIL)");
-	tex = ilutGLBindMipmaps();
+
+	//TODO replace ilutGLBindTexImage it is not very portable
+	GLuint tex = ilutGLBindTexImage();
+	LOG_GL_ERRORS;
 	ILenum Error;
 	while((Error = ilGetError())) {
-		Logger::log(ERROR, "DevIL error: %d", Error);
+		Logger::log("ERROR", "DevIL error: %d", Error);
 	}
 
 	Logger::log(log.toString(), "Texture load finished GL id: %d", tex);
-	LOG_GL_ERRORS;
 	return new TextureGL(tex);
 }
 

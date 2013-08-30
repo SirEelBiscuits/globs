@@ -7,6 +7,14 @@
 
 #include <cstdio>
 
+/*
+ * Logging class. Uses channels, for ease of separation. Can output to a
+ *  file, which can then be checked with tail -f file | grep "channel", as
+ *  well as echoed to stdout. Individual channels may be turned on and off
+ *  at any time.
+ *
+ * TODO: Provide #define macros to make removing logs easier.
+ */
 class Logger {
 private:
 	static FILE* s_file;

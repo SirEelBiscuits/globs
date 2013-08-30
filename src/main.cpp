@@ -7,13 +7,13 @@
 #include "main.h"
 #include "shader.h"
 #include "version.inc"
-#include "arrays.h"
 #include "log.h"
 #include "modelloader.h"
 #include "model.h"
 #include "texture.h"
 #include "textureloader.h"
 
+//Main loop contains code to test current features only :)
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
 
@@ -33,19 +33,18 @@ int main(int argc, char* argv[]) {
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {
 		glClear(GL_COLOR_BUFFER_BIT);
-
 		test->Draw();
-
 		glfwSwapBuffers();
-
 		//temporary shutdown command
-		if(glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS)
+		if(glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS) {
 			break;
+		}
 	}
 	glfwTerminate();
 	return 0;
 }
 
+//TODO: move this to glwrapper
 void Init(int argc, char* argv[]) {
 	Gargamel::Process(Arguments, argc, argv);
 
@@ -56,12 +55,20 @@ void Init(int argc, char* argv[]) {
 
 	Logger::setLogAll(Gargamel::ArgumentSet[LogAll].isArgumentPresent);
 	Logger::echo(Gargamel::ArgumentSet[EchoLog].isArgumentPresent);
-	//Technically this should go two lines earlier, but there is no way for it to
-	// fail before here, and no way for that output to go anywhere either
+	//Technically this should go two lines earlier, but there is no way
+	// for it to fail before here, and no way for that output to go
+	// anywhere either
 	Logger::log("INFO", "Initialising logger");
 	if(Gargamel::ArgumentSet[LogFile].isArgumentPresent) {
-		if(!Logger::setFileName(Gargamel::ArgumentSet[LogFile].argumentValue)) {
-			Logger::log("ERR", "Failed to open log file (%s)", Gargamel::ArgumentSet[LogFile].argumentValue);
+		if(!Logger::setFileName(
+			Gargamel::ArgumentSet[LogFile].argumentValue
+		)) {
+			Logger::log(
+				"ERR",
+				"Failed to open log file (%s)",
+				Gargamel::ArgumentSet[LogFile]
+					.argumentValue
+			);
 		}
 	}
 	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {

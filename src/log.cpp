@@ -11,9 +11,9 @@ void Logger::log(std::string channel, char const* format, ...) {
 	va_list ap;
 	va_start(ap, format);
 
-	if( s_activeChannels.find(channel) != s_activeChannels.end()
+	if(s_activeChannels.find(channel) != s_activeChannels.end()
 		|| s_logAll
-	  ) {
+	) {
 		if(s_file != nullptr)
 		{
 			fprintf(s_file, "[%s] ", channel.c_str());

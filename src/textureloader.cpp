@@ -1,16 +1,11 @@
 #include "glwrapper.h"
-
 #include "textureloader.h"
-
 #include "texturegl.h"
 #include <IL/il.h>
 #include <IL/ilu.h>
 #include <IL/ilut.h>
-
 #include "log.h"
-
 #include "stringintern.h"
-
 #include "glm.h"
 
 Texture* TextureLoader::LoadTextureFromFile(char const* fileName) {
@@ -32,18 +27,16 @@ Texture* TextureLoader::LoadTextureFromFile(char const* fileName) {
 		Logger::log("ERROR", "image load failed");
 		return nullptr;
 	}
-	if( ilGetInteger(IL_IMAGE_FORMAT) != IL_RGBA ) {
+	if(ilGetInteger(IL_IMAGE_FORMAT) != IL_RGBA) {
 		Logger::log(log.toString(), "enforcing format rules..");
 		ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 	}
-
 	ILinfo imgInfo;
 	iluGetImageInfo(&imgInfo);
-	if( imgInfo.Origin == IL_ORIGIN_UPPER_LEFT ) {
+	if(imgInfo.Origin == IL_ORIGIN_UPPER_LEFT) {
 		Logger::log(log.toString(), "Flipping image");
 		iluFlipImage();
 	}
-
 	Logger::log(log.toString(), "complete");
 
 	Logger::log(log.toString(), "generating GL texture");
@@ -60,16 +53,26 @@ Texture* TextureLoader::LoadTextureFromFile(char const* fileName) {
 	while((err = ilGetError())) {
 		Logger::log("ERROR", "DevIL error: %d", err);
 	}
-	if( data == nullptr )
+	if(data == nullptr)
 		Logger::log("ERROR", "DevIL gave null pointer");
 	Logger::log(log.toString(), "file loaded, size (%d, %d)", w, h);
-	Logger::log(log.toString(), "data size: %d", ilGetInteger(IL_IMAGE_SIZE_OF_DATA));
-
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
+	Logger::log(log.toString(), "data size: %d",
+		       	ilGetInteger(IL_IMAGE_SIZE_OF_DATA));
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	Logger::log(log.toString(), "uploading data..");
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(
+		GL_TEXTURE_2D,
+	       	0,
+	       	GL_RGBA,
+	       	w,
+	       	h,
+	       	0,
+	       	GL_RGBA,
+	       	GL_UNSIGNED_BYTE,
+	       	data
+	);
+	LOG_GL_ERRORS;
 
 	Logger::log(log.toString(), "Texture load finished GL id: %d", tex);
 	return new TextureGL(tex);

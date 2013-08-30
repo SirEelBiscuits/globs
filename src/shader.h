@@ -3,6 +3,11 @@
 #include <string>
 
 /*
+ * TODO: This needs a heavy rewrite to turn shaders into a properly
+ * encapsulated class for general consumption.
+ */
+
+/*
  * @brief Load shader in a shader
  * @param file The source file.
  * @param shaderType Indicates the type of shader
@@ -50,4 +55,9 @@ GLuint BindParameter(
 /*
  * sets up a single texture sampler
  */
-void BindTextureSampler(GLuint program, char const* samplerName, GLuint textureUnit);
+void BindTextureSampler(
+	GLuint program,
+       	char const* samplerName,
+       	GLuint textureUnit
+);
+

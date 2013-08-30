@@ -59,25 +59,40 @@ glm::vec4 vec4FromStringArray(std::vector<const char*> values) {
 	return ret;
 }
 
-void addVertToModel(std::vector<Vert>& outVec, int index, std::vector<const char*> verts) {
+void addVertToModel(
+	std::vector<Vert>& outVec,
+	int index,
+       	std::vector<const char*> verts
+) {
 	Vert vert = getOrCreateVert(outVec, index);
 	vert.v = vec3FromStringArray(verts);
 	outVec[index] = vert;
 }
 
-void addColourToModel(std::vector<Vert>& outVec, int index, std::vector<const char*> verts) {
+void addColourToModel(
+	std::vector<Vert>& outVec,
+       	int index,
+       	std::vector<const char*> verts
+) {
 	Vert vert = getOrCreateVert(outVec, index);
 	vert.c = vec4FromStringArray(verts);
 	outVec[index] = vert;
 }
 
-void addTextureCoordToModel(std::vector<Vert>& outVec, int index, std::vector<const char*> verts) {
+void addTextureCoordToModel(
+	std::vector<Vert>& outVec,
+       	int index,
+       	std::vector<const char*> verts
+) {
 	Vert vert = getOrCreateVert(outVec, index);
 	vert.t = vec2FromStringArray(verts);
 	outVec[index] = vert;
 }
 
-void addFaceToModel(std::vector<GLuint>& outIndices, std::vector<const char*> face) {
+void addFaceToModel(
+	std::vector<GLuint>& outIndices,
+       	std::vector<const char*> face
+) {
 	for(auto v : face)
 		outIndices.push_back(atoi(v));
 }
@@ -148,14 +163,26 @@ void FinaliseLoad(
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	Logger::log(LOG,"Allocating vertex store size: %d", sizeof(Vert) * verts.size());
+	Logger::log(LOG,"Allocating vertex store size: %d",
+		sizeof(Vert) * verts.size());
 	glGenBuffers(1, &vertData);
 	glBindBuffer(GL_ARRAY_BUFFER, vertData);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vert) * verts.size(), verts.data(), GL_STATIC_DRAW);
+	glBufferData(
+		GL_ARRAY_BUFFER,
+		sizeof(Vert) * verts.size(),
+	       	verts.data(),
+	       	GL_STATIC_DRAW
+	);
 	LOG_GL_ERRORS;
 
+	/*
+	 * TODO: Shader work
+	 * Shader stuff shouldn't really be initialised here.
+	 *  They should be self contained objects, that can set up their own
+	 *  parameters, rather than having every model attempting to do it
+	 *  for them. This is awesome code though.
+	 */
 	Logger::log(LOG,"Initialising shader params");
-
 	for( auto vc : {
 		VertComponent::Position,
 		VertComponent::Colour,
@@ -175,12 +202,23 @@ void FinaliseLoad(
 
 	BindTextureSampler(GetBasicShader(), "texture_sampler", 0);
 
-	Logger::log(LOG, "Initialising element array size: %d", sizeof(int) * indices.size());
+	Logger::log(LOG, "Initialising element array size: %d",
+		sizeof(int) * indices.size());
 	glGenBuffers(1, &indexData);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * indices.size(), indices.data(), GL_STATIC_DRAW);
+	glBufferData(
+		GL_ELEMENT_ARRAY_BUFFER,
+	       	sizeof(int) * indices.size(),
+	       	indices.data(),
+	       	GL_STATIC_DRAW
+	);
 	LOG_GL_ERRORS;
 
+	/*
+	 * This isn't strictly needed, but makes sure there is a clean slate
+	 *  for whatever code comes next. The arrays don't need clearing as
+	 *  they are on the stack.
+	 */
 	Logger::log(LOG, "Data all uploaded, cleanup time.");
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -201,6 +239,8 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	 *
 	 * Stage 1:
 	 * comprehend 'v' lines with three coordinates
+	 * comprehend 'c' lines with three colour components
+	 * comprehend 't' lines with uv coordinates
 	 * comprehend 'f' lines, with n verts
 	 */
 
@@ -215,8 +255,13 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	int curTextureIndex = 0;
 	while( curPos < buffer.size()) {
 		char const* curLine = buffer.c_str() + curPos;
-		std::vector<const char*> vec(4); // no more than 4 elements anticipated
+		// no more than 4 elements anticipated (maybe in faces?)
+		std::vector<const char*> vec(4);
 
+		/*
+		 * If this gets any longer than 3 (not including f) stick it
+		 *  in an array and iterate it instead.
+		 */
 		if(readObjectLine('v', 3, curLine, vec)) {
 			Logger::log(LOG, "found vert");
 			addVertToModel(vertList, curVertIndex, vec);
@@ -233,15 +278,17 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 			++curTextureIndex;
 		}
 
-		//faces work a little differently, because while order dependent,
-		// there is no interdependence (ie, v and c lines need to be matched up)
+		/*
+		 * Faces work a little differently, they are variable length
+		 *  (where variable is currently three TODO :) and go into
+		 *  their own array.
+		 */
 		else if(readObjectLine('f', curLine, vec)) {
 			Logger::log(LOG, "found face");
 			addFaceToModel(indexList, vec);
 		}
 		curPos = buffer.find('\n', curPos) + 1;
 	}
-
 	Logger::log(LOG, "Finished loading model");
 
 	GLuint vao, vertHandle, indexHandle;

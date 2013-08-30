@@ -25,7 +25,12 @@ GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType) {
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 		std::string log;
 		log.reserve(length);
-		glGetShaderInfoLog(shader, log.size(), nullptr, const_cast<char*>(log.data()));
+		glGetShaderInfoLog(
+			shader,
+		       	log.size(),
+		       	nullptr,
+		       	const_cast<char*>(log.data())
+		);
 		Logger::log("Shader", "Log reads: %s", log.c_str());
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -70,7 +75,8 @@ out vec4 out_colour;
 uniform sampler2D texture_sampler;
 
 void main() {
-	out_colour = colour_from_vshader * texture(texture_sampler, texture_from_vshader);
+	out_colour = colour_from_vshader
+		* texture(texture_sampler, texture_from_vshader);
 })"
 );
 
@@ -98,8 +104,10 @@ GLuint GetBasicShader(bool force) {
 	if(BasicShader != static_cast<GLuint>(-1) && !force)
 		return BasicShader;
 
-	Logger::log("Shader", "Loaded fragment shader: \n%s\nEOF\n", frag.c_str());
-	Logger::log("Shader", "Loaded vertex shader: \n%s\nEOF\n", vert.c_str());
+	Logger::log("Shader", "Loaded fragment shader: \n%s\nEOF\n",
+		frag.c_str());
+	Logger::log("Shader", "Loaded vertex shader: \n%s\nEOF\n",
+		vert.c_str());
 
 	GLuint VS = LoadShaderFromBuffer(vert, GL_VERTEX_SHADER);
 	GLuint FS = LoadShaderFromBuffer(frag, GL_FRAGMENT_SHADER);
@@ -117,9 +125,23 @@ GLuint BindParameter(
        	GLsizei stride,
 	GLvoid* offset
 ) {
-	Logger::log("Shader", "Binding parameter '%s', size: %d, stride: %d, offset: %d", name, size, stride, offset);
+	Logger::log(
+		"Shader",
+	       	"Binding parameter '%s', size: %d, stride: %d, offset: %d",
+	       	name,
+	       	size,
+	       	stride,
+	       	offset
+	);
 	GLint position = glGetAttribLocation(program, name);
-	glVertexAttribPointer(position, size, type, GL_FALSE, stride, offset);
+	glVertexAttribPointer(
+		position,
+	       	size,
+	       	type,
+	       	GL_FALSE,
+	       	stride,
+	       	offset
+	);
 	glEnableVertexAttribArray(position);
 	LOG_GL_ERRORS;
 	return position;
@@ -130,6 +152,9 @@ void BindTextureSampler(
 	char const* samplerName,
 	GLuint textureUnit
 ) {
-	glUniform1i(glGetUniformLocation(program, samplerName), textureUnit);
+	glUniform1i(
+		glGetUniformLocation(program, samplerName),
+	       	textureUnit
+	);
 	LOG_GL_ERRORS;
 }

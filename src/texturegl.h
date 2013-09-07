@@ -3,6 +3,13 @@
 #include "texture.h"
 #include "glwrapper.h"
 
+/*
+ * OpenGL 3.x specific texture class.
+ *
+ * This class should work with pretty much any openGL version. GL keeps its
+ *  data internally, so this class only holds handles, which can be used to
+ *  manipulate GL data via its functions.
+ */
 class TextureGL : public Texture {
 public:
 	virtual void cleanup() override;

@@ -7,13 +7,13 @@
 #include "main.h"
 #include "shader.h"
 #include "version.inc"
-#include "arrays.h"
 #include "log.h"
 #include "modelloader.h"
 #include "model.h"
 #include "texture.h"
 #include "textureloader.h"
 
+//Main loop contains code to test current features only :)
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
 
@@ -33,14 +33,12 @@ int main(int argc, char* argv[]) {
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {
 		glClear(GL_COLOR_BUFFER_BIT);
-
 		test->Draw();
-
 		glfwSwapBuffers();
-
 		//temporary shutdown command
-		if(glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS)
+		if(glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS) {
 			break;
+		}
 	}
 	glfwTerminate();
 	return 0;
@@ -56,51 +54,32 @@ void Init(int argc, char* argv[]) {
 
 	Logger::setLogAll(Gargamel::ArgumentSet[LogAll].isArgumentPresent);
 	Logger::echo(Gargamel::ArgumentSet[EchoLog].isArgumentPresent);
-	//Technically this should go two lines earlier, but there is no way for it to
-	// fail before here, and no way for that output to go anywhere either
+	//Technically this should go two lines earlier, but there is no way
+	// for it to fail before here, and no way for that output to go
+	// anywhere either
 	Logger::log("INFO", "Initialising logger");
 	if(Gargamel::ArgumentSet[LogFile].isArgumentPresent) {
-		if(!Logger::setFileName(Gargamel::ArgumentSet[LogFile].argumentValue)) {
-			Logger::log("ERR", "Failed to open log file (%s)", Gargamel::ArgumentSet[LogFile].argumentValue);
+		if(!Logger::setFileName(
+			Gargamel::ArgumentSet[LogFile].argumentValue
+		)) {
+			Logger::log(
+				"ERR",
+				"Failed to open log file (%s)",
+				Gargamel::ArgumentSet[LogFile]
+					.argumentValue
+			);
 		}
 	}
 	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {
 		Logger::activateChannel(s);
 	}
-
 	Logger::log("INFO", "Starting version " VERSION);
-	if(!glfwInit()) {
-		Logger::log("ERR", "glfwInit failed");
-		exit(EXIT_FAILURE);
-	}
 
-	Logger::log("INFO", "Initialising window");
+	Logger::log("INFO", "Calling into GL::Init");
 	int w = Gargamel::ArgumentSet[ScreenWidth].intVal();
 	int h = Gargamel::ArgumentSet[ScreenHeight].intVal();
-	int mode = GLFW_WINDOW;
+	ScreenMode mode = ScreenMode::Windowed;
 	if(Gargamel::ArgumentSet[FullScreen].isArgumentPresent)
-		mode = GLFW_FULLSCREEN;
-	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
-
-	if(!glfwOpenWindow(w, h, 8, 8, 8, 0, 0, 0, mode)) {
-		glfwTerminate();
-		Logger::log("ERR", "Failed to open window");
-		exit(EXIT_FAILURE);
-	}
-	Logger::log("INFO", "GL version: %s", glGetString(GL_VERSION));
-	LOG_GL_ERRORS;
-
-	Logger::log("INFO", "Starting GLEW");
-	glewExperimental = GL_TRUE;
-	if(glewInit() != GLEW_OK) {
-		glfwTerminate();
-		Logger::log("ERR", "Failed to start GLEW");
-		exit(EXIT_FAILURE);
-	}
-	Logger::log("INFO", "GLEW version: %s", glewGetString(GLEW_VERSION));
-	LOG_GL_ERRORS;
-	Logger::log("INFO", "Initialisation Complete");
+		mode = ScreenMode::Fullscreen;
+	GL::Init(w, h, mode);
 }

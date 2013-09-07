@@ -7,7 +7,10 @@
 #include "modelgl.h"
 
 /*
- * For now, this class loads models for openGL usage only :)
+ * This is the factory for loading models.
+ *
+ * At the moment it is openGL 3.0 only. This should be abstracted when there
+ *  are more choices :)
  */
 class ModelLoader {
 public:

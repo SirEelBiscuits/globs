@@ -6,12 +6,26 @@
 
 #define LOG "ModelGL"
 
-ModelGL::ModelGL(GLuint vao, GLuint vertData, GLuint indexData, int numIndices)
+ModelGL::ModelGL(
+	GLuint vao,
+       	GLuint vertData,
+       	GLuint indexData,
+       	int numIndices
+)
 	: vao(vao)
 	, vertData(vertData)
 	, indexData(indexData)
 	, numIndices(numIndices)
-{}
+{
+	if(!glIsBuffer(vertData))
+		Logger::log(LOG, "Iffy buffer for vert data (%d)",
+			vertData);
+	if(!glIsBuffer(indexData))
+		Logger::log(LOG, "Iffy buffer for index data(%d)",
+			indexData);
+	if(!glIsVertexArray(vao))
+		Logger::log(LOG, "Iffy vertex array (%d)", vao);
+}
 
 void ModelGL::Draw() const {
 	glBindVertexArray(vao);

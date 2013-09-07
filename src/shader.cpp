@@ -75,8 +75,7 @@ out vec4 out_colour;
 uniform sampler2D texture_sampler;
 
 void main() {
-	out_colour = colour_from_vshader
-		* texture(texture_sampler, texture_from_vshader);
+	out_colour = colour_from_vshader * texture(texture_sampler, texture_from_vshader);
 })"
 );
 

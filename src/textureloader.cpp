@@ -8,6 +8,8 @@
 #include "stringintern.h"
 #include "glm.h"
 
+#include "glm.h"
+
 Texture* TextureLoader::LoadTextureFromFile(char const* fileName) {
 	CLEAR_GL_ERRORS
 	static StringIntern const log("Texture");

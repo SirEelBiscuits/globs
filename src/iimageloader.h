@@ -1,7 +1,9 @@
+#pragma once
+
 class IImageLoader {
 public:
-	virtual void* getDataPointer() = 0;
-	virtual int   getWidth() const = 0;
-	virtual int   getHeight() const = 0;
-	virtual void  ~IImageLoader() = 0;
+	virtual void*        getDataPointer() = 0;
+	virtual unsigned int getWidth() const = 0;
+	virtual unsigned int getHeight() const = 0;
+	virtual              ~IImageLoader(){}
 };

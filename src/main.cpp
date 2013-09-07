@@ -12,6 +12,7 @@
 #include "model.h"
 #include "texture.h"
 #include "textureloader.h"
+#include "devilwrapper.h"
 
 //Main loop contains code to test current features only :)
 int main(int argc, char* argv[]) {
@@ -26,7 +27,9 @@ int main(int argc, char* argv[]) {
 	LOG_GL_ERRORS;
 
 	LOG_MSG("INFO", "loading texture assets");
-	Texture* tex = TextureLoader::LoadTextureFromFile("test.jpg");
+	DevILWrapper *img = new DevILWrapper("test.jpg");
+	Texture* tex = TextureLoader::LoadTextureFromFile(img);
+	delete img;
 	tex->set();
 	LOG_GL_ERRORS;
 

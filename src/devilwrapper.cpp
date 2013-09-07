@@ -1,3 +1,6 @@
+#include <IL/il.h>
+#include <IL/ilu.h>
+
 #include "devilwrapper.h"
 #include "log.h"
 
@@ -12,6 +15,7 @@ DevILWrapper::DevILWrapper(char const* fileName)
 
 	ilGenImages(1, &imgName);
 	ilBindImage(imgName);
+	LOG_MSG(LOG, "Bound to image %u", imgName);
 
 	LOG_MSG(LOG, "Loading image");
 	if(!ilLoadImage(fileName)) {
@@ -29,36 +33,37 @@ DevILWrapper::DevILWrapper(char const* fileName)
 	ILinfo imgInfo;
 	iluGetImageInfo(&imgInfo);
 	if(imgInfo.Origin == IL_ORIGIN_UPPER_LEFT) {
-		LOG_MSG(log.toString(), "Flipping image");
+		LOG_MSG(LOG, "Flipping image");
 		iluFlipImage();
 	}
-	LOG_MSG(log.toString(), "Formatting complete");
+	LOG_MSG(LOG, "Formatting complete");
 }
 
-DevILWrapper::~DevIlWrapper() override {
+DevILWrapper::~DevILWrapper() {
 	if(failed)
 		return;
+	LOG_MSG(LOG, "Unloading image %u", imgName);
 	ilDeleteImages(1, &imgName);
 }
 
-void* getDataPointer() override {
+void* DevILWrapper::getDataPointer() {
 	if(failed)
 		return nullptr;
 	ilBindImage(imgName);
 	void* ret = ilGetData();
 	if(ret == nullptr)
 		LOG_MSG("ERROR", "DevIL returned null value!");
-	return ret\
+	return ret;
 }
 
-int DevILWrapper::getWidth() const override {
+unsigned int DevILWrapper::getWidth() const {
 	if(failed)
 		return 0;
 	ilBindImage(imgName);
 	return ilGetInteger(IL_IMAGE_WIDTH);
 }
 
-int DevILWrapper::getHeight() const override {
+unsigned int DevILWrapper::getHeight() const {
 	if(failed)
 		return 0;
 	ilBindImage(imgName);

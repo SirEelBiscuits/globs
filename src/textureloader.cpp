@@ -59,7 +59,7 @@ Texture* TextureLoader::LoadTextureFromFile(char const* fileName) {
 		LOG_MSG("ERROR", "DevIL gave null pointer");
 	LOG_MSG(log.toString(), "file loaded, size (%d, %d)", w, h);
 	LOG_MSG(log.toString(), "data size: %d",
-		       	ilGetInteger(IL_IMAGE_SIZE_OF_DATA));
+	       	ilGetInteger(IL_IMAGE_SIZE_OF_DATA));
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	LOG_MSG(log.toString(), "uploading data..");

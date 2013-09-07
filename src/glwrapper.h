@@ -13,6 +13,8 @@ enum class ScreenMode {
 	Windowed
 };
 void logGLErrors(char const* file, int line);
+
+//TODO this should be made into a proper stand-alone object!
 class GL {
 public:
 	static void Init(

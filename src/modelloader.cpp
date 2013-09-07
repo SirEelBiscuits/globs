@@ -148,7 +148,7 @@ bool readObjectLine(
 Model* ModelLoader::LoadModelFromFile(char const* fileName) {
 	std::string buf;
 	ReadFile(fileName, buf);
-	Logger::log(LOG, "Loading model %s", fileName);
+	LOG_MSG(LOG, "Loading model %s", fileName);
 	return LoadModelFromBuffer(buf);
 }
 
@@ -159,11 +159,11 @@ void FinaliseLoad(
 	GLuint& vertData,
 	GLuint& indexData
 ) {
-	Logger::log(LOG, "Sending model data to GL");
+	LOG_MSG(LOG, "Sending model data to GL");
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	Logger::log(LOG,"Allocating vertex store size: %d",
+	LOG_MSG(LOG,"Allocating vertex store size: %d",
 		sizeof(Vert) * verts.size());
 	glGenBuffers(1, &vertData);
 	glBindBuffer(GL_ARRAY_BUFFER, vertData);
@@ -182,7 +182,7 @@ void FinaliseLoad(
 	 *  parameters, rather than having every model attempting to do it
 	 *  for them. This is awesome code though.
 	 */
-	Logger::log(LOG,"Initialising shader params");
+	LOG_MSG(LOG,"Initialising shader params");
 	for( auto vc : {
 		VertComponent::Position,
 		VertComponent::Colour,
@@ -202,7 +202,7 @@ void FinaliseLoad(
 
 	BindTextureSampler(GetBasicShader(), "texture_sampler", 0);
 
-	Logger::log(LOG, "Initialising element array size: %d",
+	LOG_MSG(LOG, "Initialising element array size: %d",
 		sizeof(int) * indices.size());
 	glGenBuffers(1, &indexData);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
@@ -219,13 +219,13 @@ void FinaliseLoad(
 	 *  for whatever code comes next. The arrays don't need clearing as
 	 *  they are on the stack.
 	 */
-	Logger::log(LOG, "Data all uploaded, cleanup time.");
+	LOG_MSG(LOG, "Data all uploaded, cleanup time.");
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	LOG_GL_ERRORS;
 
-	Logger::log(LOG, "all done");
+	LOG_MSG(LOG, "all done");
 }
 
 Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
@@ -247,7 +247,7 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	std::vector<Vert> vertList;
 	std::vector<GLuint> indexList;
 
-	Logger::log(LOG, "Started openGL type Model Load");
+	LOG_MSG(LOG, "Started openGL type Model Load");
 
 	size_t curPos = 0;
 	int curVertIndex = 0;
@@ -263,17 +263,17 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 		 *  in an array and iterate it instead.
 		 */
 		if(readObjectLine('v', 3, curLine, vec)) {
-			Logger::log(LOG, "found vert");
+			LOG_MSG(LOG, "found vert");
 			addVertToModel(vertList, curVertIndex, vec);
 			++curVertIndex;
 		}
 		else if(readObjectLine('c', 4, curLine, vec)) {
-			Logger::log(LOG, "found colour");
+			LOG_MSG(LOG, "found colour");
 			addColourToModel(vertList, curColourIndex, vec);
 			++curColourIndex;
 		}
 		else if(readObjectLine('t', 2, curLine, vec)) {
-			Logger::log(LOG, "found texture coord");
+			LOG_MSG(LOG, "found texture coord");
 			addTextureCoordToModel(vertList, curTextureIndex, vec);
 			++curTextureIndex;
 		}
@@ -284,12 +284,12 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 		 *  their own array.
 		 */
 		else if(readObjectLine('f', curLine, vec)) {
-			Logger::log(LOG, "found face");
+			LOG_MSG(LOG, "found face");
 			addFaceToModel(indexList, vec);
 		}
 		curPos = buffer.find('\n', curPos) + 1;
 	}
-	Logger::log(LOG, "Finished loading model");
+	LOG_MSG(LOG, "Finished loading model");
 
 	GLuint vao, vertHandle, indexHandle;
 	FinaliseLoad(vertList, indexList, vao, vertHandle, indexHandle);

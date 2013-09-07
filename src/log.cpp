@@ -7,7 +7,13 @@ std::set<std::string> Logger::s_activeChannels;
 bool Logger::s_echo = true;
 bool Logger::s_logAll = false;
 
-void Logger::log(std::string channel, char const* format, ...) {
+void Logger::log(
+	std::string channel,
+	char const* file,
+	int line,
+	char const* format,
+	...
+) {
 	va_list ap;
 	va_start(ap, format);
 
@@ -16,23 +22,27 @@ void Logger::log(std::string channel, char const* format, ...) {
 	) {
 		if(s_file != nullptr)
 		{
-			fprintf(s_file, "[%s] ", channel.c_str());
+			fprintf(s_file, "[%s] %s:%d:\t",
+				channel.c_str(),
+				file,
+				line
+			);
 			vfprintf(s_file, format, ap);
 			fprintf(s_file, "\n");
 			fflush(s_file);
 		}
 		if(s_echo)
 		{
-			printf("[%s] ", channel.c_str());
+			printf("[%s] %s:%d:\t",
+				channel.c_str(),
+				file,
+				line
+			);
 			vprintf(format, ap);
 			printf("\n");
 			fflush(stdout);
 		}
 	}
-}
-
-void Logger::log(std::string channel, std::string text) {
-	log(channel, text.c_str());
 }
 
 void Logger::activateChannel(std::string channel) {

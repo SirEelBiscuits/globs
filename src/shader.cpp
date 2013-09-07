@@ -20,7 +20,7 @@ GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType) {
 	GLint test;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &test);
 	if(!test) {
-		Logger::log("Shader", "Shader compilation failed.");
+		LOG_MSG("Shader", "Shader compilation failed.");
 		GLint length;
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 		std::string log;
@@ -31,7 +31,7 @@ GLuint LoadShaderFromBuffer(std::string const& buffer, GLenum shaderType) {
 		       	nullptr,
 		       	const_cast<char*>(log.data())
 		);
-		Logger::log("Shader", "Log reads: %s", log.c_str());
+		LOG_MSG("Shader", "Log reads: %s", log.c_str());
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -103,9 +103,9 @@ GLuint GetBasicShader(bool force) {
 	if(BasicShader != static_cast<GLuint>(-1) && !force)
 		return BasicShader;
 
-	Logger::log("Shader", "Loaded fragment shader: \n%s\nEOF\n",
+	LOG_MSG("Shader", "Loaded fragment shader: \n%s\nEOF\n",
 		frag.c_str());
-	Logger::log("Shader", "Loaded vertex shader: \n%s\nEOF\n",
+	LOG_MSG("Shader", "Loaded vertex shader: \n%s\nEOF\n",
 		vert.c_str());
 
 	GLuint VS = LoadShaderFromBuffer(vert, GL_VERTEX_SHADER);
@@ -124,7 +124,7 @@ GLuint BindParameter(
        	GLsizei stride,
 	GLvoid* offset
 ) {
-	Logger::log(
+	LOG_MSG(
 		"Shader",
 	       	"Binding parameter '%s', size: %d, stride: %d, offset: %d",
 	       	name,

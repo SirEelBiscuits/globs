@@ -20,12 +20,12 @@ int main(int argc, char* argv[]) {
 	Model* test;
 
 	LOG_GL_ERRORS;
-	Logger::log("INFO", "loading model assets");
+	LOG_MSG("INFO", "loading model assets");
 	char const* modelsource = "square.obj";
 	test = ModelLoader::LoadModelFromFile(modelsource);
 	LOG_GL_ERRORS;
 
-	Logger::log("INFO", "loading texture assets");
+	LOG_MSG("INFO", "loading texture assets");
 	Texture* tex = TextureLoader::LoadTextureFromFile("test.jpg");
 	tex->set();
 	LOG_GL_ERRORS;
@@ -57,12 +57,12 @@ void Init(int argc, char* argv[]) {
 	//Technically this should go two lines earlier, but there is no way
 	// for it to fail before here, and no way for that output to go
 	// anywhere either
-	Logger::log("INFO", "Initialising logger");
+	LOG_MSG("INFO", "Initialising logger");
 	if(Gargamel::ArgumentSet[LogFile].isArgumentPresent) {
 		if(!Logger::setFileName(
 			Gargamel::ArgumentSet[LogFile].argumentValue
 		)) {
-			Logger::log(
+			LOG_MSG(
 				"ERR",
 				"Failed to open log file (%s)",
 				Gargamel::ArgumentSet[LogFile]
@@ -73,9 +73,9 @@ void Init(int argc, char* argv[]) {
 	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {
 		Logger::activateChannel(s);
 	}
-	Logger::log("INFO", "Starting version " VERSION);
+	LOG_MSG("INFO", "Starting version " VERSION);
 
-	Logger::log("INFO", "Calling into GL::Init");
+	LOG_MSG("INFO", "Calling into GL::Init");
 	int w = Gargamel::ArgumentSet[ScreenWidth].intVal();
 	int h = Gargamel::ArgumentSet[ScreenHeight].intVal();
 	ScreenMode mode = ScreenMode::Windowed;

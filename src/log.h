@@ -12,9 +12,9 @@
  *  file, which can then be checked with tail -f file | grep "channel", as
  *  well as echoed to stdout. Individual channels may be turned on and off
  *  at any time.
- *
- * TODO: Provide #define macros to make removing logs easier.
  */
+#define LOG_MSG(Channel, Format, ...) Logger::log(Channel, __FILE__, \
+		__LINE__, Format, ##__VA_ARGS__)
 class Logger {
 private:
 	static FILE* s_file;
@@ -25,8 +25,13 @@ private:
 public:
 	static bool setFileName(std::string filename);
 
-	static void log(std::string channel, char const* format, ...);
-	static void log(std::string channel, std::string text);
+	static void log(
+		std::string channel,
+	       	char const* file,
+		int line,
+		char const* format,
+	       	...
+	);
 	static void activateChannel(std::string channel);
 	static void deactivateChannel(std::string channel);
 	static void echo(bool toEcho) { s_echo = toEcho; }

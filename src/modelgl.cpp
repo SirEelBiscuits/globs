@@ -18,13 +18,13 @@ ModelGL::ModelGL(
 	, numIndices(numIndices)
 {
 	if(!glIsBuffer(vertData))
-		Logger::log(LOG, "Iffy buffer for vert data (%d)",
+		LOG_MSG(LOG, "Iffy buffer for vert data (%d)",
 			vertData);
 	if(!glIsBuffer(indexData))
-		Logger::log(LOG, "Iffy buffer for index data(%d)",
+		LOG_MSG(LOG, "Iffy buffer for index data(%d)",
 			indexData);
 	if(!glIsVertexArray(vao))
-		Logger::log(LOG, "Iffy vertex array (%d)", vao);
+		LOG_MSG(LOG, "Iffy vertex array (%d)", vao);
 }
 
 void ModelGL::Draw() const {
@@ -37,11 +37,11 @@ void ModelGL::Draw() const {
 }
 
 void ModelGL::Cleanup() {
-	Logger::log(LOG, "Cleaning up model");
+	LOG_MSG(LOG, "Cleaning up model");
 	glDeleteBuffers(1, &vertData);
 	glDeleteBuffers(1, &indexData);
 	glDeleteVertexArrays(1, &vao);
-	Logger::log(LOG, "Done");
+	LOG_MSG(LOG, "Done");
 	LOG_GL_ERRORS;
 }
 

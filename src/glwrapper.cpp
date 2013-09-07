@@ -6,7 +6,7 @@ void logGLErrors(char const* file, int line) {
 	GLuint err;
 	while((err = glGetError()) != GL_NO_ERROR) {
 		if(file != nullptr && line != 0)
-			Logger::log(lc.toString(), "%s:%d - %d: %s",
+			LOG_MSG(lc.toString(), "%s:%d - %d: %s",
 			       	file, line, err, gluErrorString(err)
 			);
 	}
@@ -14,10 +14,10 @@ void logGLErrors(char const* file, int line) {
 
 void GL::Init(int screenWidth, int screenHeight, ScreenMode screenMode) {
 	if(!glfwInit()) {
-		Logger::log("ERR", "glfwInit failed");
+		LOG_MSG("ERR", "glfwInit failed");
 		exit(EXIT_FAILURE);
 	}
-	Logger::log("INFO", "Initialising window (%d, %d)"
+	LOG_MSG("INFO", "Initialising window (%d, %d)"
 		, screenWidth, screenHeight);
 
 	// TODO improve this
@@ -30,7 +30,7 @@ void GL::Init(int screenWidth, int screenHeight, ScreenMode screenMode) {
 		mode = GLFW_WINDOW;
 		break;
 	default:
-		Logger::log("ERR", "Nonsensical mode requested");
+		LOG_MSG("ERR", "Nonsensical mode requested");
 		break;
 	}
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -47,20 +47,20 @@ void GL::Init(int screenWidth, int screenHeight, ScreenMode screenMode) {
 		)
 	) {
 		glfwTerminate();
-		Logger::log("ERR", "Failed to open window");
+		LOG_MSG("ERR", "Failed to open window");
 		exit(EXIT_FAILURE);
 	}
-	Logger::log("INFO", "GL version: %s", glGetString(GL_VERSION));
+	LOG_MSG("INFO", "GL version: %s", glGetString(GL_VERSION));
 	LOG_GL_ERRORS;
 
-	Logger::log("INFO", "Starting GLEW");
+	LOG_MSG("INFO", "Starting GLEW");
 	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK) {
 		glfwTerminate();
-		Logger::log("ERR", "Failed to start GLEW");
+		LOG_MSG("ERR", "Failed to start GLEW");
 		exit(EXIT_FAILURE);
 	}
-	Logger::log("INFO", "GLEW version: %s", glewGetString(GLEW_VERSION));
+	LOG_MSG("INFO", "GLEW version: %s", glewGetString(GLEW_VERSION));
 	LOG_GL_ERRORS;
-	Logger::log("INFO", "Initialisation Complete");
+	LOG_MSG("INFO", "Initialisation Complete");
 }

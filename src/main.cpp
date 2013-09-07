@@ -44,7 +44,6 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 
-//TODO: move this to glwrapper
 void Init(int argc, char* argv[]) {
 	Gargamel::Process(Arguments, argc, argv);
 
@@ -74,40 +73,13 @@ void Init(int argc, char* argv[]) {
 	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {
 		Logger::activateChannel(s);
 	}
-
 	Logger::log("INFO", "Starting version " VERSION);
-	if(!glfwInit()) {
-		Logger::log("ERR", "glfwInit failed");
-		exit(EXIT_FAILURE);
-	}
 
-	Logger::log("INFO", "Initialising window");
+	Logger::log("INFO", "Calling into GL::Init");
 	int w = Gargamel::ArgumentSet[ScreenWidth].intVal();
 	int h = Gargamel::ArgumentSet[ScreenHeight].intVal();
-	int mode = GLFW_WINDOW;
+	ScreenMode mode = ScreenMode::Windowed;
 	if(Gargamel::ArgumentSet[FullScreen].isArgumentPresent)
-		mode = GLFW_FULLSCREEN;
-	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
-
-	if(!glfwOpenWindow(w, h, 8, 8, 8, 0, 0, 0, mode)) {
-		glfwTerminate();
-		Logger::log("ERR", "Failed to open window");
-		exit(EXIT_FAILURE);
-	}
-	Logger::log("INFO", "GL version: %s", glGetString(GL_VERSION));
-	LOG_GL_ERRORS;
-
-	Logger::log("INFO", "Starting GLEW");
-	glewExperimental = GL_TRUE;
-	if(glewInit() != GLEW_OK) {
-		glfwTerminate();
-		Logger::log("ERR", "Failed to start GLEW");
-		exit(EXIT_FAILURE);
-	}
-	Logger::log("INFO", "GLEW version: %s", glewGetString(GLEW_VERSION));
-	LOG_GL_ERRORS;
-	Logger::log("INFO", "Initialisation Complete");
+		mode = ScreenMode::Fullscreen;
+	GL::Init(w, h, mode);
 }

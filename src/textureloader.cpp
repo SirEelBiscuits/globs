@@ -7,7 +7,7 @@
 
 #include "glm.h"
 
-Texture* TextureLoader::LoadTextureFromFile(IImageLoader* il) {
+Texture* TextureLoader::LoadTextureFromFile(IImageLoader&& il) {
 	CLEAR_GL_ERRORS
 	static StringIntern const log("Texture");
 
@@ -18,9 +18,9 @@ Texture* TextureLoader::LoadTextureFromFile(IImageLoader* il) {
 	LOG_GL_ERRORS;
 
 	unsigned int w,h;
-	w = il->getWidth();
-	h = il->getHeight();
-	void* data = il->getDataPointer();
+	w = il.getWidth();
+	h = il.getHeight();
+	void* data = il.getDataPointer();
 	if(data == nullptr) {
 		LOG_MSG("ERROR", "DevIL gave null pointer");
 		return nullptr;

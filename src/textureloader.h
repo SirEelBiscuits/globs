@@ -9,5 +9,5 @@
  */
 class TextureLoader {
 public:
-	static Texture* LoadTextureFromFile(IImageLoader&& il);
+	static Texture* LoadTexture(IImageLoader&& il);
 };

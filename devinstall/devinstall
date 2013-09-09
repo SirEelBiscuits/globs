@@ -7,3 +7,6 @@ mkdir intermediate
 cp devinstall/precomtocopy .git/hooks/pre-commit
 git submodule init src/gargamel
 git submodule update src/gargamel
+
+git submodule init src/testing/testsuite
+git submodule update src/testing/testsuite

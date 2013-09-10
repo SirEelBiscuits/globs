@@ -50,11 +50,6 @@ int main(int argc, char* argv[]) {
 void Init(int argc, char* argv[]) {
 	Gargamel::Process(Arguments, argc, argv);
 
-	//run tests and exit from here
-	if(Gargamel::ArgumentSet[RunUnitTests].isArgumentPresent) {
-		exit(UnitTesting::RunTests());
-	}
-
 	if(Gargamel::ArgumentSet[Help].isArgumentPresent) {
 		Gargamel::ShowUsage();
 		exit(EXIT_SUCCESS);
@@ -81,6 +76,7 @@ void Init(int argc, char* argv[]) {
 	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {
 		Logger::activateChannel(s);
 	}
+
 	LOG_MSG("INFO", "Starting version " VERSION);
 
 	LOG_MSG("INFO", "Calling into GL::Init");
@@ -90,4 +86,9 @@ void Init(int argc, char* argv[]) {
 	if(Gargamel::ArgumentSet[FullScreen].isArgumentPresent)
 		mode = ScreenMode::Fullscreen;
 	GL::Init(w, h, mode);
+
+	//run tests and exit from here
+	if(Gargamel::ArgumentSet[RunUnitTests].isArgumentPresent) {
+		exit(UnitTesting::RunTests());
+	}
 }

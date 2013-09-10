@@ -8,7 +8,9 @@ TextureGL::TextureGL(GLuint handle)
 {}
 
 void TextureGL::cleanup() {
+	LOG_MSG("Texture", "Cleaning up texture %u", handle);
 	glDeleteTextures(1, &handle);
+	LOG_GL_ERRORS;
 }
 
 void TextureGL::set() const {

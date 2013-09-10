@@ -25,6 +25,7 @@ class fakeIL : public IImageLoader {
 	}
 	virtual ~fakeIL(){}
 };
+
 BEGIN_TEST_DEF(TextureLoaderTest) {
 	fakeIL il;
 	Texture* tex = TextureLoader::LoadTexture(il);
@@ -33,3 +34,9 @@ BEGIN_TEST_DEF(TextureLoaderTest) {
 	return true;
 }
 END_TEST_DEF(TextureLoaderTest);
+
+namespace UnitTesting {
+	bool RunTests() {
+		return Testing::RunAllTests();
+	}
+}

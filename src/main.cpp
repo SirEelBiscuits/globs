@@ -14,6 +14,8 @@
 #include "textureloader.h"
 #include "devilwrapper.h"
 
+#include "testing/testmain.h"
+
 //Main loop contains code to test current features only :)
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
@@ -47,6 +49,11 @@ int main(int argc, char* argv[]) {
 
 void Init(int argc, char* argv[]) {
 	Gargamel::Process(Arguments, argc, argv);
+
+	//run tests and exit from here
+	if(Gargamel::ArgumentSet[RunUnitTests].isArgumentPresent) {
+		exit(UnitTesting::RunTests());
+	}
 
 	if(Gargamel::ArgumentSet[Help].isArgumentPresent) {
 		Gargamel::ShowUsage();

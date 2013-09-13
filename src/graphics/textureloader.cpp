@@ -1,11 +1,9 @@
 #include "glwrapper.h"
 #include "textureloader.h"
 #include "texturegl.h"
-#include "log.h"
-#include "stringintern.h"
 #include "glm.h"
-
-#include "glm.h"
+#include "../util/log.h"
+#include "../util/stringintern.h"
 
 Texture* TextureLoader::LoadTexture(IImageLoader&& il) {
 	CLEAR_GL_ERRORS

@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 
-#include "log.h"
+#include "../util/log.h"
 #include "modelgl.h"
 
 /*

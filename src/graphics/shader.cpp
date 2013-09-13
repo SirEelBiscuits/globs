@@ -1,8 +1,8 @@
 #include "glwrapper.h"
 
 #include "shader.h"
-#include "log.h"
-#include "utility.h"
+#include "../util/log.h"
+#include "../util/utility.h"
 
 #include <iostream>
 #include <string>

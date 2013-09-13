@@ -1,4 +1,4 @@
-#include "stringintern.h"
+#include "../util/stringintern.h"
 
 std::vector<std::string> StringIntern::s_strings;
 

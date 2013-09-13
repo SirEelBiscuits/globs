@@ -1,6 +1,6 @@
 #include "texturegl.h"
 #include "shader.h"
-#include "log.h"
+#include "../util/log.h"
 
 TextureGL::TextureGL(GLuint handle)
 	: handle(handle)

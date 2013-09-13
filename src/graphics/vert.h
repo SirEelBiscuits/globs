@@ -1,8 +1,8 @@
 #pragma once
 
 #include "glm.h"
-#include "utility.h"
-#include "stringintern.h"
+#include "../util/utility.h"
+#include "../util/stringintern.h"
 
 enum class VertComponent {
 	Position,

@@ -1,5 +1,5 @@
 #include "modelloader.h"
-#include "utility.h"
+#include "../util/utility.h"
 #include "glm.h"
 
 #include <string>

@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include "vert.h"
-#include "log.h"
+#include "../util/log.h"
 
 /*
  * This is a baseclass to contain the shared interface for model files.

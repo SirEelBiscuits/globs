@@ -1,18 +1,20 @@
-#include "glwrapper.h"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <fstream>
 
 #include "main.h"
-#include "shader.h"
 #include "version.inc"
-#include "log.h"
-#include "modelloader.h"
-#include "model.h"
-#include "texture.h"
-#include "textureloader.h"
-#include "devilwrapper.h"
+
+#include "graphics/glwrapper.h"
+#include "graphics/shader.h"
+#include "graphics/modelloader.h"
+#include "graphics/model.h"
+#include "graphics/texture.h"
+#include "graphics/textureloader.h"
+#include "graphics/devilwrapper.h"
+
+#include "util/log.h"
 
 //Main loop contains code to test current features only :)
 int main(int argc, char* argv[]) {

@@ -49,5 +49,6 @@ $(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
  
 clean:
 	rm -f .depend $(OBJDIR)/*.o $(OUTDIR)/$(PROGRAM)
+	find $(OBJDIR) -regex ".*\.o" -print0 | xargs -0 rm
  
 .PHONY: clean depend

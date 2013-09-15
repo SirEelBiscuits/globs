@@ -13,8 +13,8 @@
  *  well as echoed to stdout. Individual channels may be turned on and off
  *  at any time.
  */
-#define LOG_MSG(Channel, Format, ...) Logger::log(Channel, __FILE__, \
-		__LINE__, Format, ##__VA_ARGS__)
+#define LOG_MSG(Channel, ...) Logger::log(Channel, __FILE__, \
+		__LINE__, __VA_ARGS__)
 class Logger {
 private:
 	static FILE* s_file;

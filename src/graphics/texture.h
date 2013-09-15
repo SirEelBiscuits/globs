@@ -8,7 +8,10 @@
  */
 class Texture {
 public:
+	virtual ~Texture(){}
 	virtual void cleanup() = 0;
 	virtual void set() const = 0;
+	virtual unsigned int getWidth() const = 0;
+	virtual unsigned int getHeight() const = 0;
 };
 

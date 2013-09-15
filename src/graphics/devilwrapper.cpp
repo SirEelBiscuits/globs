@@ -2,7 +2,7 @@
 #include <IL/ilu.h>
 
 #include "devilwrapper.h"
-#include "log.h"
+#include "../util/log.h"
 
 #define LOG "IL"
 

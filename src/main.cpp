@@ -1,18 +1,22 @@
-#include "glwrapper.h"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <fstream>
 
 #include "main.h"
-#include "shader.h"
 #include "version.inc"
-#include "log.h"
-#include "modelloader.h"
-#include "model.h"
-#include "texture.h"
-#include "textureloader.h"
-#include "devilwrapper.h"
+
+#include "graphics/glwrapper.h"
+#include "graphics/shader.h"
+#include "graphics/modelloader.h"
+#include "graphics/model.h"
+#include "graphics/texture.h"
+#include "graphics/textureloader.h"
+#include "graphics/devilwrapper.h"
+
+#include "util/log.h"
+
+#include "testing/testmain.h"
 
 //Main loop contains code to test current features only :)
 int main(int argc, char* argv[]) {
@@ -74,6 +78,7 @@ void Init(int argc, char* argv[]) {
 	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {
 		Logger::activateChannel(s);
 	}
+
 	LOG_MSG("INFO", "Starting version " VERSION);
 
 	LOG_MSG("INFO", "Calling into GL::Init");
@@ -83,4 +88,9 @@ void Init(int argc, char* argv[]) {
 	if(Gargamel::ArgumentSet[FullScreen].isArgumentPresent)
 		mode = ScreenMode::Fullscreen;
 	GL::Init(w, h, mode);
+
+	//run tests and exit from here
+	if(Gargamel::ArgumentSet[RunUnitTests].isArgumentPresent) {
+		exit(UnitTesting::RunTests());
+	}
 }

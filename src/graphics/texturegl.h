@@ -12,8 +12,11 @@
  */
 class TextureGL : public Texture {
 public:
+	virtual ~TextureGL() override {}
 	virtual void cleanup() override;
 	virtual void set() const override;
+	virtual unsigned int getWidth() const override;
+	virtual unsigned int getHeight() const override;
 
 	TextureGL(GLuint handle);
 private:

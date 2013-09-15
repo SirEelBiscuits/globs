@@ -13,6 +13,7 @@ enum ArgNames {
 	ScreenWidth,
 	ScreenHeight,
 	FullScreen,
+	RunUnitTests,
 };
 
 //Command line option descriptions
@@ -62,6 +63,11 @@ START_ARGS(Arguments)
 		"full-screen",
 		NoArg,
 		"\tStart in full screen mode\n")
+	DESCRIBE_ARG(RunUnitTests,
+		't',
+		"run-unit-tests",
+		NoArg,
+		"\tRuns any unit tests the game has defined, then exits\n")
 END_ARGS
 
 void Init(int argc, char* argv[]);

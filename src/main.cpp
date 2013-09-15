@@ -16,6 +16,8 @@
 
 #include "util/log.h"
 
+#include "testing/testmain.h"
+
 //Main loop contains code to test current features only :)
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
@@ -76,6 +78,7 @@ void Init(int argc, char* argv[]) {
 	for(auto s : *(Gargamel::ArgumentSet[LogChannel].argumentArray)) {
 		Logger::activateChannel(s);
 	}
+
 	LOG_MSG("INFO", "Starting version " VERSION);
 
 	LOG_MSG("INFO", "Calling into GL::Init");
@@ -85,4 +88,9 @@ void Init(int argc, char* argv[]) {
 	if(Gargamel::ArgumentSet[FullScreen].isArgumentPresent)
 		mode = ScreenMode::Fullscreen;
 	GL::Init(w, h, mode);
+
+	//run tests and exit from here
+	if(Gargamel::ArgumentSet[RunUnitTests].isArgumentPresent) {
+		exit(UnitTesting::RunTests());
+	}
 }

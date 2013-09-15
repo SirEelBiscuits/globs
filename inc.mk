@@ -7,6 +7,7 @@ CPP_FILES+=src/graphics/texturegl.cpp
 CPP_FILES+=src/graphics/textureloader.cpp
 CPP_FILES+=src/graphics/vert.cpp
 CPP_FILES+=src/main.cpp
+CPP_FILES+=src/testing/testmain.cpp
 CPP_FILES+=src/util/log.cpp
 CPP_FILES+=src/util/stringintern.cpp
 CPP_FILES+=src/util/utility.cpp

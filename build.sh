@@ -2,6 +2,8 @@
 
 find src -regex ".*\.cpp" | sed s/^/CPP_FILES+=/ > inc.mk
 
-find src -type -d -exec mkdir intermediate/\{\} \;
+cd src
+find . -type d -exec mkdir -p ../intermediate/\{\} \;
+cd ..
 
 make $@

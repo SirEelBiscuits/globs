@@ -31,7 +31,9 @@ public:
 
 BEGIN_TEST_DEF(TextureLoaderTest) {
 	fakeIL il;
-	Texture* tex = TextureLoader::LoadTexture(fakeIL());
+	Texture* tex = TextureLoader::LoadTexture(fakeIL(),
+		TextureType::Diffuse
+	);
 	ASSERT_EQ(tex->getWidth(), il.getWidth());
 	ASSERT_EQ(tex->getHeight(), il.getHeight());
 	tex->cleanup();

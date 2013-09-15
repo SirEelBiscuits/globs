@@ -17,9 +17,10 @@ public:
 	virtual void set() const override;
 	virtual unsigned int getWidth() const override;
 	virtual unsigned int getHeight() const override;
+	virtual TextureType  getType() const override;
 
-	TextureGL(GLuint handle);
+	TextureGL(GLuint handle, TextureType type);
 private:
 	GLuint const handle;
-	GLuint const textureUnitToUse;
+	TextureType type;
 };

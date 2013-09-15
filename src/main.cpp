@@ -31,7 +31,9 @@ int main(int argc, char* argv[]) {
 	LOG_GL_ERRORS;
 
 	LOG_MSG("INFO", "loading texture assets");
-	Texture* tex = TextureLoader::LoadTexture(DevILWrapper("test.jpg"));
+	Texture* tex = TextureLoader::LoadTexture(DevILWrapper("test.jpg")
+		, TextureType::Diffuse
+	);
 	tex->set();
 	LOG_GL_ERRORS;
 

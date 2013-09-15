@@ -2,9 +2,9 @@
 #include "shader.h"
 #include "../util/log.h"
 
-TextureGL::TextureGL(GLuint handle)
+TextureGL::TextureGL(GLuint handle, TextureType type)
 	: handle(handle)
-	, textureUnitToUse(0)
+	, type(type)
 {}
 
 void TextureGL::cleanup() {
@@ -14,7 +14,7 @@ void TextureGL::cleanup() {
 }
 
 void TextureGL::set() const {
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE0 + AS_INDEX(type));
 	glBindTexture(GL_TEXTURE_2D, handle);
 	LOG_GL_ERRORS;
 }
@@ -41,4 +41,8 @@ unsigned int TextureGL::getHeight() const {
 	       	&val
 	);
 	return val;
+}
+
+TextureType TextureGL::getType() const {
+	return type;
 }

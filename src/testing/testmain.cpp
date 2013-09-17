@@ -4,7 +4,14 @@
 #include "../graphics/devilwrapper.h"
 #include "../graphics/textureloader.h"
 #include "../graphics/ishader.h"
+#include "../graphics/shaderloader.h"
 #include "../graphics/vert.h"
+
+/*
+ * Not indenting, as it adds next to no information. The namespace is to
+ * prevent testing code from polluting the rest of the project
+ */
+namespace UnitTesting {
 
 BEGIN_TEST_DEF(DevILWrapperTest) {
 	//IImageLoader& obj = DevILWrapper("test.jpg");
@@ -77,32 +84,33 @@ void main() {
 	v.push_back(ShaderLoader::LoadShaderFromBuffers(frag,vert));
 
 	for(auto s: v) {
-		ASSERT_NEQ(nullptr, s);
-		ASSERT_GE (0, s->getShaderID());
+		ASSERT_NEQ(static_cast<decltype(s)>(nullptr), s);
+		ASSERT_GT (0u, s->getShaderID());
 		for(auto a: {
 				VertComponent::Position,
 				VertComponent::Colour,
 				VertComponent::Texture
 			}
 		) {
-			ASSERT_NEQ(false, s->IsAttributeSupported(a));
+			ASSERT_NEQ(false, s->isAttributeSupported(a));
 		}
-		ASSERT_GE (0, s->getNumTextureSlots());
-		for(int i = 0; i < AS_INDEX(TextureType::Count)) {
+		ASSERT_GT (0u, s->getNumTextureSlots());
+		for(int i = 0; i < AS_INDEX(TextureType::Count); ++i) {
 			if(s->isTextureTypeSupported(
 				static_cast<TextureType>(i)
 			)) {
-				ASSERT_GE(0, s->getSamplerSlot(
+				ASSERT_GT(0u, s->getTextureSlot(
 					static_cast<TextureType>(i)
 				));
 			}
 		}
 	}
+	return true;
 }
 END_TEST_DEF(ShaderTest);
 
-namespace UnitTesting {
-	bool RunTests() {
-		return Testing::RunAllTests();
-	}
+bool RunTests() {
+	return Testing::RunAllTests();
 }
+
+} //end namespace UnitTesting

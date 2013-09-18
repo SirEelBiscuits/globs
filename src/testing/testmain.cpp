@@ -94,16 +94,7 @@ void main() {
 		) {
 			ASSERT_NEQ(false, s->isAttributeSupported(a));
 		}
-		ASSERT_GT (0u, s->getNumTextureSlots());
-		for(int i = 0; i < AS_INDEX(TextureType::Count); ++i) {
-			if(s->isTextureTypeSupported(
-				static_cast<TextureType>(i)
-			)) {
-				ASSERT_GT(0u, s->getTextureSlot(
-					static_cast<TextureType>(i)
-				));
-			}
-		}
+		ASSERT_NEQ(false, s->bind());
 	}
 	return TEST_SUCCESS;
 }

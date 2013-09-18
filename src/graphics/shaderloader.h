@@ -9,8 +9,8 @@ class ShaderLoader {
 public:
 	static IShader* GetBasicShader();
 	static IShader* LoadShaderFromFiles(
-		std::string fragmentShaderFilename,
-		std::string vertexShaderFilename
+		char const* fragmentShaderFilename,
+		char const* vertexShaderFilename
 	);
 	static IShader* LoadShaderFromBuffers(
 		std::string fragmentShader,

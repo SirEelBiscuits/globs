@@ -19,7 +19,7 @@ BEGIN_TEST_DEF(DevILWrapperTest) {
 	ASSERT_NEQ(0u, obj.getWidth());
 	ASSERT_NEQ(0u, obj.getHeight());
 	ASSERT_NEQ(static_cast<void*>(nullptr), obj.getDataPointer());
-	return true;
+	return TEST_SUCCESS;
 }
 END_TEST_DEF(DevILWrapperTest);
 
@@ -47,7 +47,7 @@ BEGIN_TEST_DEF(TextureLoaderTest) {
 	ASSERT_EQ(tex->getHeight(), il.getHeight());
 	tex->cleanup();
 	delete tex;
-	return true;
+	return TEST_SUCCESS;
 }
 END_TEST_DEF(TextureLoaderTest);
 
@@ -105,7 +105,7 @@ void main() {
 			}
 		}
 	}
-	return true;
+	return TEST_SUCCESS;
 }
 END_TEST_DEF(ShaderTest);
 

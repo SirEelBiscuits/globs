@@ -6,8 +6,8 @@ void logGLErrors(char const* file, int line) {
 	GLuint err;
 	while((err = glGetError()) != GL_NO_ERROR) {
 		if(file != nullptr && line != 0)
-			LOG_MSG(lc.toString(), "%s:%d - %d: %s",
-			       	file, line, err, gluErrorString(err)
+			LOG_MSG_LOC(lc.toString(), file, line, "%d: %s",
+			       	err, gluErrorString(err)
 			);
 	}
 }

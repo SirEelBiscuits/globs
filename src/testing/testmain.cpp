@@ -61,11 +61,11 @@ BEGIN_TEST_DEF(ShaderTest) {
 R"(#version 150
 in vec4 cfv;
 in vec2 tfv;
-uniform sampler2D ts;
+uniform sampler2D diffuseTex;
 
 out vec4 oc;
 void main() {
-	oc = cfv*texture(ts,tfv);
+	oc = cfv*texture(diffuseTex,tfv);
 })"
 	);
 	std::string vert(
@@ -97,6 +97,12 @@ void main() {
 			ASSERT_NEQ(false, s->isAttributeSupported(a));
 		}
 		ASSERT_NEQ(false, s->bind());
+		for(auto t: {
+				TextureType::Diffuse
+			}
+		) {
+			ASSERT_NEQ(false, s->isTextureTypeSupported(t));
+		}
 	}
 	return TEST_SUCCESS;
 }

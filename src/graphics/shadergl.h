@@ -9,13 +9,18 @@
 
 class ShaderGL : public IShader {
 public:
-	//TODO: initialiser list for tex/attributes enabled?
 	ShaderGL(GLuint id);
+	ShaderGL(
+		GLuint id,
+		std::vector<VertComponent>& attributeTypes,
+	       	std::vector<TextureType>& textureTypes
+	);
 	virtual ~ShaderGL();
 	virtual unsigned int getShaderID() const override;
 	virtual bool isTextureTypeSupported(TextureType type) const override;
 	virtual bool isAttributeSupported(VertComponent attribute) const override;
 	virtual bool bind() const;
+	virtual bool isShaderValid() const override;
 private:
 	GLuint shaderID;
 	bool supportedTextureTypes[AS_INDEX(TextureType::Count)];

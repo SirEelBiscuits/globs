@@ -57,23 +57,24 @@ BEGIN_TEST_DEF(ShaderTest) {
 	 * will test has been written. Forgive me :)
 	 */
 	std::vector<IShader*> v;
-	v.push_back(ShaderLoader::GetBasicShader());
 	std::string frag(
 R"(#version 150
 in vec4 cfv;
 in vec2 tfv;
-out vec4 oc;
 uniform sampler2D ts;
+
+out vec4 oc;
 void main() {
-	oc = cfs*texture(ts,tfv);
+	oc = cfv*texture(ts,tfv);
 })"
 	);
 	std::string vert(
 R"(#version 150
 in vec4 position;
 in vec4 colour;
-out vec4 cfv;
 in vec2 texture;
+
+out vec4 cfv;
 out vec2 tfv;
 void main() {
 	gl_Position = position;
@@ -85,7 +86,8 @@ void main() {
 
 	for(auto s: v) {
 		ASSERT_NEQ(static_cast<decltype(s)>(nullptr), s);
-		ASSERT_GT (0u, s->getShaderID());
+		ASSERT_LT (0u, s->getShaderID());
+		ASSERT_NEQ(false, s->isShaderValid());
 		for(auto a: {
 				VertComponent::Position,
 				VertComponent::Colour,

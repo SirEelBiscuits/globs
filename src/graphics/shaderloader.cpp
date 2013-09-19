@@ -42,9 +42,9 @@ IShader* ShaderLoader::LoadShaderFromBuffers(
 		return nullptr;
 	}
 	LOG_MSG(LOG.toString(), "Success, checking texture support");
-	auto supportedTypes = getSupportedTypes(vertexShaderSource);
+	auto supportedTypes = getSupportedTypes(program);
 	LOG_MSG(LOG.toString(), "Checking attribute support");
-	auto supportedAttribs = getSupportedAttributes(vertexShaderSource);
+	auto supportedAttribs = getSupportedAttributes(program);
 	LOG_MSG(LOG.toString(), "Creating shader object");
 	return new ShaderGL(program, supportedAttribs, supportedTypes);
 }
@@ -100,15 +100,38 @@ GLuint ShaderLoader::CreateProgramFromShaders(
 }
 
 std::vector<TextureType> ShaderLoader::getSupportedTypes(
-	std::string vertexShader
+	GLuint program
 ) {
-	//TODO
-	return std::vector<TextureType>();
+	std::vector<TextureType> ret;
+	for(int i = 0; i < AS_INDEX(VertComponent::Count); ++i) {
+		GLint pos = glGetUniformLocation(
+			program,
+			Texture::StringFromTextureType(
+				static_cast<TextureType>(i)
+			).toString()
+		);
+		if(pos != -1) {
+			ret.push_back(static_cast<TextureType>(i));
+		}
+	}
+	return ret;
 }
 
 std::vector<VertComponent> ShaderLoader::getSupportedAttributes(
-	std::string vertexShader
+	GLuint program
 ) {
-	//TODO
-	return std::vector<VertComponent>();
+	std::vector<VertComponent> ret;
+	for(int i = 0; i < AS_INDEX(VertComponent::Count); ++i) {
+		GLint pos = glGetAttribLocation(
+			program,
+			Vert::StringFromVertComponent(
+				static_cast<VertComponent>(i)
+			).toString()
+		);
+		if(pos != -1) {
+			ret.push_back(static_cast<VertComponent>(i));
+		}
+	}
+	return ret;
 }
+

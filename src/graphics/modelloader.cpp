@@ -191,7 +191,7 @@ void FinaliseLoad(
 	} ) {
 		BindParameter(
 			GetBasicShader(),
-			stringFromVertComponent(vc),
+			Vert::StringFromVertComponent(vc),
 			Vert::getElementWidths(vc),
 			GL_FLOAT,
 			Vert::getStride(),

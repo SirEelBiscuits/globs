@@ -13,8 +13,6 @@ enum class VertComponent {
 };
 MAKE_INDEX(VertComponent);
 
-StringIntern stringFromVertComponent(VertComponent const vc);
-
 /*
  * This is both a container for vertex data, and a provider
  *  of information about its data structure. Do not let these
@@ -38,5 +36,6 @@ struct Vert {
 
 	// +1 so the last element contains the stride
 	static size_t Offsets[AS_INDEX(VertComponent::Count)+1];
+	static StringIntern StringFromVertComponent(VertComponent const vc);
 };
 

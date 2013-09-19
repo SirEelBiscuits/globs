@@ -30,9 +30,9 @@ private:
 		GLuint vertShader
 	);
 	static std::vector<TextureType> getSupportedTypes(
-		std::string vertexShader
+		GLuint program
 	);
 	static std::vector<VertComponent> getSupportedAttributes(
-		std::string vertexShader
+		GLuint program
 	);
 };

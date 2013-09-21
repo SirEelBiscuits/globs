@@ -49,25 +49,6 @@ IShader* ShaderLoader::LoadShaderFromBuffers(
 	return new ShaderGL(program, supportedAttribs, supportedTypes);
 }
 
-bool ShaderLoader::getShaderErrorLog(GLuint shader, GLenum ErrorToQuery) {
-	GLint test;
-	glGetShaderiv(shader, ErrorToQuery, &test);
-	if(!test) {
-		GLint len;
-		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
-		std::string log(len, '\0');
-		glGetShaderInfoLog(
-			shader,
-			log.size(),
-			nullptr,
-			const_cast<char*>(log.data())
-		);
-		LOG_MSG(LOG.toString(), "Log reads: %s", log.c_str());
-		return false;
-	}
-	return true;
-}
-
 GLuint ShaderLoader::LoadShaderFromBuffer(
 	std::string const& buffer,
 	GLenum shaderType
@@ -76,9 +57,25 @@ GLuint ShaderLoader::LoadShaderFromBuffer(
 	GLuint shader = glCreateShader(shaderType);
 	glShaderSource(shader, 1, &src, nullptr);
 	glCompileShader(shader);
+	LOG_GL_ERRORS;
 
-	if(!getShaderErrorLog(shader, GL_COMPILE_STATUS)) {
+	GLint compStatus;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compStatus);
+	LOG_GL_ERRORS;
+	if(!compStatus) {
+		GLint len;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
+		LOG_GL_ERRORS;
+		std::string log(len, '\0');
+		glGetShaderInfoLog(
+			shader,
+			log.size(),
+			nullptr,
+			const_cast<char*>(log.data())
+		);
+		LOG_GL_ERRORS;
 		LOG_MSG(LOG.toString(), "Shader compilation failed.");
+		LOG_MSG(LOG.toString(), "Log reads: %s", log.c_str());
 		return 0;
 	}
 	return shader;
@@ -91,9 +88,27 @@ GLuint ShaderLoader::CreateProgramFromShaders(
 	GLuint prog = glCreateProgram();
 	glAttachShader(prog, fragShader);
 	glAttachShader(prog, vertShader);
+	LOG_GL_ERRORS;
 	glLinkProgram(prog);
-	if(!getShaderErrorLog(prog, GL_LINK_STATUS)) {
+	LOG_GL_ERRORS;
+
+	GLint linkStatus;
+	glGetProgramiv(prog, GL_LINK_STATUS, &linkStatus);
+	LOG_GL_ERRORS;
+	if(!linkStatus) {
+		GLint len;
+		glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &len);
+		LOG_GL_ERRORS;
+		std::string log(len, '\0');
+		glGetProgramInfoLog(
+			prog,
+			log.size(),
+			nullptr,
+			const_cast<char*>(log.data())
+		);
+		LOG_GL_ERRORS;
 		LOG_MSG(LOG.toString(), "Link Failed");
+		LOG_MSG(LOG.toString(), "Log reads: %s", log.c_str());
 		return 0;
 	}
 	return prog;
@@ -103,16 +118,22 @@ std::vector<TextureType> ShaderLoader::getSupportedTypes(
 	GLuint program
 ) {
 	std::vector<TextureType> ret;
-	for(int i = 0; i < AS_INDEX(VertComponent::Count); ++i) {
+	for(int i = 0; i < AS_INDEX(TextureType::Count); ++i) {
+		StringIntern tt = Texture::StringFromTextureType(
+			static_cast<TextureType>(i)
+		);
+		LOG_MSG(LOG.toString(), "checking %s", tt.toString());
 		GLint pos = glGetUniformLocation(
 			program,
-			Texture::StringFromTextureType(
-				static_cast<TextureType>(i)
-			).toString()
+			tt.toString()
 		);
 		if(pos != -1) {
 			ret.push_back(static_cast<TextureType>(i));
 		}
+		else {
+			CLEAR_GL_ERRORS;
+		}
+		LOG_GL_ERRORS;
 	}
 	return ret;
 }
@@ -131,6 +152,10 @@ std::vector<VertComponent> ShaderLoader::getSupportedAttributes(
 		if(pos != -1) {
 			ret.push_back(static_cast<VertComponent>(i));
 		}
+		else {
+			CLEAR_GL_ERRORS;
+		}
+		LOG_GL_ERRORS;
 	}
 	return ret;
 }

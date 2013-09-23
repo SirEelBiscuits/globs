@@ -17,8 +17,8 @@ IShader* ShaderLoader::LoadShaderFromFiles(
 }
 
 IShader* ShaderLoader::LoadShaderFromBuffers(
-	std::string fragmentShaderSource,
-	std::string vertexShaderSource
+	std::string const& fragmentShaderSource,
+	std::string const& vertexShaderSource
 ) {
 	LOG_MSG(LOG.toString(), "Shader build started");
 	LOG_MSG(LOG.toString(), "building fragment shader");

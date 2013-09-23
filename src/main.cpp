@@ -23,15 +23,20 @@
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
 
-
-
-	Model* test;
+	LOG_MSG("INFO", "Loading shader");
+	IShader* bs = ShaderLoader::LoadShaderFromFiles(
+		"basic.frag",
+		"basic.vert"
+	);
 
 	LOG_GL_ERRORS;
 	LOG_MSG("INFO", "loading model assets");
 	char const* modelsource = "square.obj";
-	test = ModelLoader::LoadModelFromFile(modelsource);
+	Model* test = ModelLoader::LoadModelFromFile(modelsource);
 	LOG_GL_ERRORS;
+
+	bs->bind();
+	bs->set();
 
 	LOG_MSG("INFO", "loading texture assets");
 	Texture* tex = TextureLoader::LoadTexture(DevILWrapper("test.jpg")

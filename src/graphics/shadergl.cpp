@@ -46,8 +46,49 @@ bool ShaderGL::set() const {
 	return true;
 }
 
+bool ShaderGL::bind() const {
+	if(!isShaderValid())
+		return false;
+	for(int i = 0; i < AS_INDEX(VertComponent::Count); ++i ) {
+		VertComponent cur = static_cast<VertComponent>(i);
+		if(isAttributeSupported(cur)) {
+			GLint pos = glGetAttribLocation(
+				getShaderID(),
+				Vert::StringFromVertComponent(cur)
+					.toString()
+			);
+			glVertexAttribPointer(
+				pos,
+				Vert::getElementWidths(cur),
+				GL_FLOAT,
+				GL_FALSE,
+				Vert::getStride(),
+				reinterpret_cast<void*>(
+					Vert::getOffset(cur)
+				)
+			);
+		}
+	}
+
+	for(int i = 0; i < AS_INDEX(TextureType::Count); ++i) {
+		TextureType cur = static_cast<TextureType>(i);
+		if(isTextureTypeSupported(cur)) {
+			glUniform1i(
+				glGetUniformLocation(
+					getShaderID(),
+					Texture::StringFromTextureType(
+						cur
+					).toString()
+				),
+				AS_INDEX(cur)
+			);
+		}
+	}
+	return true;
+}
+
 bool ShaderGL::isShaderValid() const {
-	if( !glIsProgram(shaderID) )
+	if(!glIsProgram(shaderID))
 		return false;
 	glValidateProgram(shaderID);
 	GLint retVal;

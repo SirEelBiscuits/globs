@@ -15,8 +15,8 @@ public:
 		char const* vertexShaderFilename
 	);
 	static IShader* LoadShaderFromBuffers(
-		std::string fragmentShader,
-	       	std::string vertexShader
+		std::string const& fragmentShader,
+	       	std::string const& vertexShader
 	);
 private:
 	static StringIntern LOG;

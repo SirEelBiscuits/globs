@@ -26,7 +26,7 @@ ModelGL::ModelGL(
 		LOG_MSG(LOG, "Iffy vertex array (%d)", vao);
 }
 
-void ModelGL::Draw() const {
+void ModelGL::draw() const {
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
@@ -35,7 +35,7 @@ void ModelGL::Draw() const {
 	LOG_GL_ERRORS;
 }
 
-void ModelGL::Cleanup() {
+void ModelGL::cleanup() {
 	LOG_MSG(LOG, "Cleaning up model");
 	glDeleteBuffers(1, &vertData);
 	glDeleteBuffers(1, &indexData);
@@ -44,3 +44,6 @@ void ModelGL::Cleanup() {
 	LOG_GL_ERRORS;
 }
 
+unsigned int ModelGL::getID() const {
+	return vao;
+}

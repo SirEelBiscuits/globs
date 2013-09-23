@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {
 		glClear(GL_COLOR_BUFFER_BIT);
-		test->Draw();
+		test->draw();
 		glfwSwapBuffers();
 		//temporary shutdown command
 		if(glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS) {

@@ -29,7 +29,8 @@ public:
 
 	//overrides
 
-	virtual void Draw() const override;
-	virtual void Cleanup()    override;
+	virtual void draw() const override;
+	virtual void cleanup()    override;
+	virtual unsigned int getID() const override;
 };
 

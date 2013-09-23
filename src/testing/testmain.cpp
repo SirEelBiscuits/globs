@@ -6,6 +6,8 @@
 #include "../graphics/ishader.h"
 #include "../graphics/shaderloader.h"
 #include "../graphics/vert.h"
+#include "../graphics/model.h"
+#include "../graphics/modelloader.h"
 
 /*
  * Not indenting, as it adds next to no information. The namespace is to
@@ -108,6 +110,27 @@ void main() {
 	return TEST_SUCCESS;
 }
 END_TEST_DEF(ShaderTest);
+
+BEGIN_TEST_DEF(ModelTest) {
+	std::string modBuf(
+R"(v 0.0 0.0 0.0
+v 1.0 0.0 0.0
+v 0.0 1.0 0.0
+v 1.0 1.0 0.0
+
+f 0 1 2
+f 2 1 3
+)"
+	);
+	Model* m = ModelLoader::LoadModelFromBuffer(modBuf);
+
+	ASSERT_NEQ(static_cast<Model*>(nullptr), m);
+	ASSERT_NEQ(0u, m->getID());
+	ASSERT_NEQ(false, m->draw());
+
+	return TEST_SUCCESS;
+}
+END_TEST_DEF(ModelTest);
 
 bool RunTests() {
 	return Testing::RunAllTests();

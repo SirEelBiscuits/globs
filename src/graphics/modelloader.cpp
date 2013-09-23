@@ -7,7 +7,6 @@
 #include <iostream>
 
 #include "modelgl.h"
-#include "shader.h"
 
 #define LOG "Model"
 
@@ -174,33 +173,6 @@ void FinaliseLoad(
 	       	GL_STATIC_DRAW
 	);
 	LOG_GL_ERRORS;
-
-	/*
-	 * TODO: Shader work
-	 * Shader stuff shouldn't really be initialised here.
-	 *  They should be self contained objects, that can set up their own
-	 *  parameters, rather than having every model attempting to do it
-	 *  for them. This is awesome code though.
-	 */
-	LOG_MSG(LOG,"Initialising shader params");
-	for( auto vc : {
-		VertComponent::Position,
-		VertComponent::Colour,
-		VertComponent::Texture,
-		VertComponent::Normal
-	} ) {
-		BindParameter(
-			GetBasicShader(),
-			Vert::StringFromVertComponent(vc),
-			Vert::getElementWidths(vc),
-			GL_FLOAT,
-			Vert::getStride(),
-			(GLvoid*)Vert::getOffset(vc)
-		);
-		LOG_GL_ERRORS;
-	}
-
-	BindTextureSampler(GetBasicShader(), "texture_sampler", 0);
 
 	LOG_MSG(LOG, "Initialising element array size: %d",
 		sizeof(int) * indices.size());

@@ -38,7 +38,7 @@ bool ShaderGL::isAttributeSupported(VertComponent attribute) const {
 	return supportedAttributes[AS_INDEX(attribute)];
 }
 
-bool ShaderGL::bind() const {
+bool ShaderGL::set() const {
 	if(!isShaderValid())
 		return false;
 	glUseProgram(shaderID);

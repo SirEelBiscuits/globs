@@ -1,5 +1,4 @@
 #include "texturegl.h"
-#include "shader.h"
 #include "../util/log.h"
 
 TextureGL::TextureGL(GLuint handle, TextureType type)

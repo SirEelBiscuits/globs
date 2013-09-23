@@ -19,7 +19,7 @@ public:
 	virtual unsigned int getShaderID() const override;
 	virtual bool isTextureTypeSupported(TextureType type) const override;
 	virtual bool isAttributeSupported(VertComponent attribute) const override;
-	virtual bool bind() const;
+	virtual bool set() const;
 	virtual bool isShaderValid() const override;
 private:
 	GLuint shaderID;

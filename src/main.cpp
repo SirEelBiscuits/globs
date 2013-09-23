@@ -7,7 +7,8 @@
 #include "version.inc"
 
 #include "graphics/glwrapper.h"
-#include "graphics/shader.h"
+#include "graphics/ishader.h"
+#include "graphics/shaderloader.h"
 #include "graphics/modelloader.h"
 #include "graphics/model.h"
 #include "graphics/texture.h"
@@ -21,6 +22,8 @@
 //Main loop contains code to test current features only :)
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
+
+
 
 	Model* test;
 

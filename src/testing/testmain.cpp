@@ -96,7 +96,7 @@ void main() {
 		) {
 			ASSERT_NEQ(false, s->isAttributeSupported(a));
 		}
-		ASSERT_NEQ(false, s->bind());
+		ASSERT_NEQ(false, s->set());
 		for(auto t: {
 				TextureType::Diffuse
 			}

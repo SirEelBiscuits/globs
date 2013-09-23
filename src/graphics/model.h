@@ -14,7 +14,7 @@
  */
 class Model {
 public:
-	virtual void draw() const = 0;
+	virtual bool draw() const = 0;
 	virtual void cleanup() = 0;
 	virtual unsigned int getID() const = 0;
 };

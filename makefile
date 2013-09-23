@@ -21,6 +21,8 @@ CPPFLAGS += -Wall -pedantic -std=c++11 -I$(LIBBASE)\\include -static-libgcc -sta
 LDFLAGS += -L$(LIBBASE)\\lib -lGLFW -lglew32s -lopengl32 -lglu32 -lDevIL -lILU -lILUT
  
 all: version $(PROGRAM) 
+
+nolink: version $(OBJS)
  
 $(PROGRAM): .depend $(OBJS)
 	$(CXX) $(CPPFLAGS) $(OBJS) $(LDFLAGS) -o $(OUTDIR)/$(PROGRAM)

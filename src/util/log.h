@@ -15,6 +15,8 @@
  */
 #define LOG_MSG(Channel, ...) Logger::log(Channel, __FILE__, \
 		__LINE__, __VA_ARGS__)
+#define LOG_MSG_LOC(Channel, file, line, ...) Logger::log(Channel, file, \
+		line, __VA_ARGS__)
 class Logger {
 private:
 	static FILE* s_file;

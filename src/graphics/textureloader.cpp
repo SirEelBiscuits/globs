@@ -5,7 +5,7 @@
 #include "../util/log.h"
 #include "../util/stringintern.h"
 
-Texture* TextureLoader::LoadTexture(IImageLoader&& il) {
+Texture* TextureLoader::LoadTexture(IImageLoader&& il, TextureType type) {
 	CLEAR_GL_ERRORS
 	static StringIntern const log("Texture");
 
@@ -42,6 +42,6 @@ Texture* TextureLoader::LoadTexture(IImageLoader&& il) {
 	LOG_GL_ERRORS;
 
 	LOG_MSG(log.toString(), "Texture load finished GL id: %d", tex);
-	return new TextureGL(tex);
+	return new TextureGL(tex, type);
 }
 

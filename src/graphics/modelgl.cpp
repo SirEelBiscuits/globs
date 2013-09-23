@@ -1,6 +1,5 @@
 #include "modelgl.h"
 #include "vert.h"
-#include "shader.h"
 
 #include <iostream>
 

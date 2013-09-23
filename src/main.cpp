@@ -7,7 +7,8 @@
 #include "version.inc"
 
 #include "graphics/glwrapper.h"
-#include "graphics/shader.h"
+#include "graphics/ishader.h"
+#include "graphics/shaderloader.h"
 #include "graphics/modelloader.h"
 #include "graphics/model.h"
 #include "graphics/texture.h"
@@ -22,16 +23,25 @@
 int main(int argc, char* argv[]) {
 	Init(argc, argv);
 
-	Model* test;
+	LOG_MSG("INFO", "Loading shader");
+	IShader* bs = ShaderLoader::LoadShaderFromFiles(
+		"basic.frag",
+		"basic.vert"
+	);
 
 	LOG_GL_ERRORS;
 	LOG_MSG("INFO", "loading model assets");
 	char const* modelsource = "square.obj";
-	test = ModelLoader::LoadModelFromFile(modelsource);
+	Model* test = ModelLoader::LoadModelFromFile(modelsource);
 	LOG_GL_ERRORS;
 
+	bs->bind();
+	bs->set();
+
 	LOG_MSG("INFO", "loading texture assets");
-	Texture* tex = TextureLoader::LoadTexture(DevILWrapper("test.jpg"));
+	Texture* tex = TextureLoader::LoadTexture(DevILWrapper("test.jpg")
+		, TextureType::Diffuse
+	);
 	tex->set();
 	LOG_GL_ERRORS;
 

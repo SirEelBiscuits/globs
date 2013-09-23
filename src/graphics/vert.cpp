@@ -11,7 +11,7 @@ size_t Vert::Offsets[AS_INDEX(VertComponent::Count)+1] = {
 		+ sizeof(glm::vec2)
 };
 
-StringIntern stringFromVertComponent(VertComponent const VC) {
+StringIntern Vert::StringFromVertComponent(VertComponent const VC) {
 	//I love that this works in C++11
 	static StringIntern strings[AS_INDEX(VertComponent::Count)+1] =
 	{

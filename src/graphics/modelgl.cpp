@@ -26,21 +26,48 @@ ModelGL::ModelGL(
 		LOG_MSG(LOG, "Iffy vertex array (%d)", vao);
 }
 
-void ModelGL::Draw() const {
-	glBindVertexArray(vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
+bool ModelGL::draw() const {
+	bool returnFlag = true;
+	returnFlag &= bind();
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	LOG_GL_ERRORS;
+	returnFlag &= LOG_GL_ERRORS;
+	returnFlag &= unbind();
+	return returnFlag;
 }
 
-void ModelGL::Cleanup() {
+bool ModelGL::cleanup() {
 	LOG_MSG(LOG, "Cleaning up model");
 	glDeleteBuffers(1, &vertData);
 	glDeleteBuffers(1, &indexData);
 	glDeleteVertexArrays(1, &vao);
 	LOG_MSG(LOG, "Done");
-	LOG_GL_ERRORS;
+	return LOG_GL_ERRORS;
 }
 
+bool ModelGL::bind() const {
+	glBindVertexArray(vao);
+	return LOG_GL_ERRORS;
+}
+
+bool ModelGL::unbind() const {
+	glBindVertexArray(0u);
+	return LOG_GL_ERRORS;
+}
+
+bool ModelGL::useShader(IShader* shader) {
+	bool returnFlag = true;
+	returnFlag &= bind();
+	glBindBuffer(GL_ARRAY_BUFFER, vertData);
+	returnFlag &= LOG_GL_ERRORS;
+
+	returnFlag &= shader->bind();
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0u);
+	returnFlag &= LOG_GL_ERRORS;
+	returnFlag &= unbind();
+	return returnFlag;
+}
+
+unsigned int ModelGL::getID() const {
+	return vao;
+}

@@ -158,14 +158,19 @@ void FinaliseLoad(
 	GLuint& vertData,
 	GLuint& indexData
 ) {
+	CLEAR_GL_ERRORS;
 	LOG_MSG(LOG, "Sending model data to GL");
 	glGenVertexArrays(1, &vao);
+	LOG_GL_ERRORS;
 	glBindVertexArray(vao);
+	LOG_GL_ERRORS;
 
 	LOG_MSG(LOG,"Allocating vertex store size: %d",
 		sizeof(Vert) * verts.size());
 	glGenBuffers(1, &vertData);
+	LOG_GL_ERRORS;
 	glBindBuffer(GL_ARRAY_BUFFER, vertData);
+	LOG_GL_ERRORS;
 	glBufferData(
 		GL_ARRAY_BUFFER,
 		sizeof(Vert) * verts.size(),
@@ -177,7 +182,9 @@ void FinaliseLoad(
 	LOG_MSG(LOG, "Initialising element array size: %d",
 		sizeof(int) * indices.size());
 	glGenBuffers(1, &indexData);
+	LOG_GL_ERRORS;
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
+	LOG_GL_ERRORS;
 	glBufferData(
 		GL_ELEMENT_ARRAY_BUFFER,
 	       	sizeof(int) * indices.size(),
@@ -193,7 +200,6 @@ void FinaliseLoad(
 	 */
 	LOG_MSG(LOG, "Data all uploaded, cleanup time.");
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	LOG_GL_ERRORS;
 
@@ -265,7 +271,9 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 
 	GLuint vao, vertHandle, indexHandle;
 	FinaliseLoad(vertList, indexList, vao, vertHandle, indexHandle);
+	LOG_MSG(LOG, "Creating model object...");
 	ModelGL* ret = new ModelGL(vao, vertHandle, indexHandle, indexList.size());
+	LOG_MSG(LOG, "Done");
 	return ret;
 }
 

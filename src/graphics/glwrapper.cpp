@@ -1,15 +1,18 @@
 #include "glwrapper.h"
 
-void logGLErrors(char const* file, int line) {
+bool logGLErrors(char const* file, int line) {
 	static StringIntern lc("GL ERROR");
+	bool retVal = true;
 
 	GLuint err;
 	while((err = glGetError()) != GL_NO_ERROR) {
+		retVal = false;
 		if(file != nullptr && line != 0)
 			LOG_MSG_LOC(lc.toString(), file, line, "%d: %s",
 			       	err, gluErrorString(err)
 			);
 	}
+	return retVal;
 }
 
 void GL::Init(int screenWidth, int screenHeight, ScreenMode screenMode) {

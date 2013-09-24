@@ -26,11 +26,15 @@ public:
 	       	GLuint indexData,
 	       	int numIndices
 	);
+	virtual ~ModelGL(){}
 
 	//overrides
 
 	virtual bool draw() const override;
-	virtual void cleanup()    override;
+	virtual bool cleanup()    override;
+	virtual bool bind() const override;
+	virtual bool unbind() const override;
+	virtual bool useShader(IShader* shader) override;
 	virtual unsigned int getID() const override;
 };
 

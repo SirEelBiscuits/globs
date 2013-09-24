@@ -9,8 +9,8 @@
 #include "graphics/glwrapper.h"
 #include "graphics/ishader.h"
 #include "graphics/shaderloader.h"
-#include "graphics/modelloader.h"
 #include "graphics/model.h"
+#include "graphics/modelloader.h"
 #include "graphics/texture.h"
 #include "graphics/textureloader.h"
 #include "graphics/devilwrapper.h"
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 	Init(argc, argv);
 
 	LOG_MSG("INFO", "Loading shader");
-	IShader* bs = ShaderLoader::LoadShaderFromFiles(
+	IShader* basicShader = ShaderLoader::LoadShaderFromFiles(
 		"basic.frag",
 		"basic.vert"
 	);
@@ -32,11 +32,14 @@ int main(int argc, char* argv[]) {
 	LOG_GL_ERRORS;
 	LOG_MSG("INFO", "loading model assets");
 	char const* modelsource = "square.obj";
-	Model* test = ModelLoader::LoadModelFromFile(modelsource);
+	Model* testModel = ModelLoader::LoadModelFromFile(modelsource);
 	LOG_GL_ERRORS;
+	testModel->bind();
 
-	bs->bind();
-	bs->set();
+	testModel->useShader(basicShader);
+	if(!basicShader->set()) {
+		LOG_MSG("ERROR", "Shader failed to set");
+	}
 
 	LOG_MSG("INFO", "loading texture assets");
 	Texture* tex = TextureLoader::LoadTexture(DevILWrapper("test.jpg")
@@ -48,7 +51,7 @@ int main(int argc, char* argv[]) {
 	glClearColor(1.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {
 		glClear(GL_COLOR_BUFFER_BIT);
-		test->draw();
+		testModel->draw();
 		glfwSwapBuffers();
 		//temporary shutdown command
 		if(glfwGetKey(GLFW_KEY_ESC) == GLFW_PRESS) {

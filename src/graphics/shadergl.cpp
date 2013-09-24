@@ -42,13 +42,14 @@ bool ShaderGL::set() const {
 	if(!isShaderValid())
 		return false;
 	glUseProgram(shaderID);
-	LOG_GL_ERRORS;
-	return true;
+	return LOG_GL_ERRORS;
 }
 
 bool ShaderGL::bind() const {
+	static StringIntern Log("Shader");
 	if(!isShaderValid())
 		return false;
+	bool returnFlag = true;
 	for(int i = 0; i < AS_INDEX(VertComponent::Count); ++i ) {
 		VertComponent cur = static_cast<VertComponent>(i);
 		if(isAttributeSupported(cur)) {
@@ -57,6 +58,7 @@ bool ShaderGL::bind() const {
 				Vert::StringFromVertComponent(cur)
 					.toString()
 			);
+			returnFlag &= LOG_GL_ERRORS;
 			glVertexAttribPointer(
 				pos,
 				Vert::getElementWidths(cur),
@@ -67,9 +69,16 @@ bool ShaderGL::bind() const {
 					Vert::getOffset(cur)
 				)
 			);
+			returnFlag &= LOG_GL_ERRORS;
+			LOG_MSG(Log.toString(), "bound %s",
+				Vert::StringFromVertComponent(cur)
+					.toString()
+			);
 		}
 	}
 
+	//DELETEME ?
+	set();
 	for(int i = 0; i < AS_INDEX(TextureType::Count); ++i) {
 		TextureType cur = static_cast<TextureType>(i);
 		if(isTextureTypeSupported(cur)) {
@@ -82,9 +91,14 @@ bool ShaderGL::bind() const {
 				),
 				AS_INDEX(cur)
 			);
+			returnFlag &= LOG_GL_ERRORS;
+			LOG_MSG(Log.toString(), "bound %s",
+				Texture::StringFromTextureType(cur)
+					.toString()
+			);
 		}
 	}
-	return true;
+	return returnFlag;
 }
 
 bool ShaderGL::isShaderValid() const {
@@ -94,7 +108,7 @@ bool ShaderGL::isShaderValid() const {
 	GLint retVal;
 	glGetProgramiv(shaderID, GL_VALIDATE_STATUS, &retVal);
 	if(retVal == GL_TRUE)
-		return true;
+		return LOG_GL_ERRORS;
 	int len;
         glGetProgramiv(shaderID, GL_INFO_LOG_LENGTH, &len);
 	std::string buffer(len+1, '\0');

@@ -2,11 +2,11 @@
 
 bool logGLErrors(char const* file, int line) {
 	static StringIntern lc("GL ERROR");
-	bool retVal = false;
+	bool retVal = true;
 
 	GLuint err;
 	while((err = glGetError()) != GL_NO_ERROR) {
-		retVal = true;
+		retVal = false;
 		if(file != nullptr && line != 0)
 			LOG_MSG_LOC(lc.toString(), file, line, "%d: %s",
 			       	err, gluErrorString(err)

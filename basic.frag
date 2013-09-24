@@ -7,6 +7,6 @@ out vec4 out_colour;
 uniform sampler2D diffuseTex;
 
 void main() {
-	out_colour = vec4(1.0, 0.0, 0.0, 0.0); //colour_from_vshader * texture(diffuseTex, texture_from_vshader);
+	out_colour = colour_from_vshader * texture(diffuseTex, texture_from_vshader);
 }
 

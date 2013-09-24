@@ -59,6 +59,7 @@ bool ShaderGL::bind() const {
 					.toString()
 			);
 			returnFlag &= LOG_GL_ERRORS;
+			glEnableVertexAttribArray(pos);
 			glVertexAttribPointer(
 				pos,
 				Vert::getElementWidths(cur),
@@ -70,15 +71,13 @@ bool ShaderGL::bind() const {
 				)
 			);
 			returnFlag &= LOG_GL_ERRORS;
-			LOG_MSG(Log.toString(), "bound %s",
+			LOG_MSG(Log.toString(), "bound %s(%d)",
 				Vert::StringFromVertComponent(cur)
-					.toString()
+					.toString(),
+				pos
 			);
 		}
 	}
-
-	//DELETEME ?
-	set();
 	for(int i = 0; i < AS_INDEX(TextureType::Count); ++i) {
 		TextureType cur = static_cast<TextureType>(i);
 		if(isTextureTypeSupported(cur)) {

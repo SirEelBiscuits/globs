@@ -34,7 +34,6 @@ int main(int argc, char* argv[]) {
 	char const* modelsource = "square.obj";
 	Model* testModel = ModelLoader::LoadModelFromFile(modelsource);
 	LOG_GL_ERRORS;
-	testModel->bind();
 
 	testModel->useShader(basicShader);
 	if(!basicShader->set()) {
@@ -48,7 +47,7 @@ int main(int argc, char* argv[]) {
 	tex->set();
 	LOG_GL_ERRORS;
 
-	glClearColor(1.,0.,0.,1.);
+	glClearColor(0.,0.,0.,1.);
 	while(glfwGetWindowParam(GLFW_OPENED)) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		testModel->draw();

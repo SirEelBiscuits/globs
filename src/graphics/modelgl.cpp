@@ -46,14 +46,10 @@ bool ModelGL::cleanup() {
 
 bool ModelGL::bind() const {
 	glBindVertexArray(vao);
-	//DELETEME this *shouldn't* be needed
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData);
 	return LOG_GL_ERRORS;
 }
 
 bool ModelGL::unbind() const {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0u);
-	//DELETEME
 	glBindVertexArray(0u);
 	return LOG_GL_ERRORS;
 }
@@ -63,7 +59,9 @@ bool ModelGL::useShader(IShader* shader) {
 	returnFlag &= bind();
 	glBindBuffer(GL_ARRAY_BUFFER, vertData);
 	returnFlag &= LOG_GL_ERRORS;
+
 	returnFlag &= shader->bind();
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0u);
 	returnFlag &= LOG_GL_ERRORS;
 	returnFlag &= unbind();

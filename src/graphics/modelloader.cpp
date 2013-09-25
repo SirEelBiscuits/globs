@@ -133,7 +133,7 @@ bool readObjectLine(
 	line = munchWhitespace(line);
 
 	std::vector<const char*> ret;
-	for( int i = 0; i < numElements; ++i ) {
+	for(int i = 0; i < numElements; ++i) {
 		if(terminatesLine(line))
 			return false;
 		ret.push_back(line);
@@ -231,7 +231,7 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 	int curVertIndex = 0;
 	int curColourIndex = 0;
 	int curTextureIndex = 0;
-	while( curPos < buffer.size()) {
+	while(curPos < buffer.size()) {
 		char const* curLine = buffer.c_str() + curPos;
 		// no more than 4 elements anticipated (maybe in faces?)
 		std::vector<const char*> vec(4);

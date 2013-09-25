@@ -7,8 +7,8 @@ StringIntern StringIntern::Create(std::string fromString) {
 }
 
 int const StringIntern::CreateInternal(std::string fromString) {
-	for(int i = s_strings.size() - 1; i >= 0; --i ) {
-		if(s_strings[i].compare( fromString ) == 0 ) {
+	for(int i = s_strings.size() - 1; i >= 0; --i) {
+		if(s_strings[i].compare(fromString) == 0) {
 			return i;
 		}
 	}

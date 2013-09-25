@@ -2,7 +2,12 @@
 
 #include "gargamel/gargamel.h"
 
-//Command line option names. See Gargamel.h for documentation
+/**
+ * Command line option names.
+ *
+ * For use with gargamel.
+ * \sa gargamel.h
+ */
 enum ArgNames {
 	Unknown,
 	Help,

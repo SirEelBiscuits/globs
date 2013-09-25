@@ -2,9 +2,9 @@
 
 StringIntern Texture::StringFromTextureType(TextureType const tt) {
 	static StringIntern strings[AS_INDEX(TextureType::Count)+1] = {
-		StringIntern("diffuseTex"),
-		StringIntern("normalTex"),
-		StringIntern("")
+		"diffuseTex"_i,
+		"normalTex"_i,
+		""_i
 	};
 	static_assert(sizeof(strings)/sizeof(strings[0])
 			== AS_INDEX(TextureType::Count)+1,

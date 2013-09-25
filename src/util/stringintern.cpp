@@ -2,10 +2,6 @@
 
 std::vector<std::string> StringIntern::s_strings;
 
-StringIntern StringIntern::Create(std::string fromString) {
-	return StringIntern(CreateInternal(fromString));
-}
-
 int const StringIntern::CreateInternal(std::string fromString) {
 	for(int i = s_strings.size() - 1; i >= 0; --i) {
 		if(s_strings[i].compare(fromString) == 0) {
@@ -36,8 +32,8 @@ char const* const StringIntern::toString() const {
 	return s_strings[idx].c_str();
 }
 
-StringIntern operator"" _i(char const* in) {
-	return StringIntern::Create(in);
+StringIntern operator"" _i(char const* in, size_t numChars) {
+	return StringIntern(std::string(in, numChars));
 }
 
 std::ostream& operator<<(std::ostream& os, StringIntern& si) {

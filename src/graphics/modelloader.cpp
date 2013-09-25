@@ -250,6 +250,13 @@ Model* ModelLoader::LoadModelFromBuffer(std::string const& buffer) {
 			addColourToModel(vertList, curColourIndex, vec);
 			++curColourIndex;
 		}
+		/*
+		 * TODO multi character openings
+		 *
+		 * Single characters are easier to deal with, but to
+		 * actually support wavefront .obj files, this should be
+		 * "vn"
+		 */
 		else if(readObjectLine('t', 2, curLine, vec)) {
 			LOG_MSG(LOG, "found texture coord");
 			addTextureCoordToModel(vertList, curTextureIndex, vec);

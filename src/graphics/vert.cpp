@@ -15,11 +15,11 @@ StringIntern Vert::StringFromVertComponent(VertComponent const VC) {
 	//I love that this works in C++11
 	static StringIntern strings[AS_INDEX(VertComponent::Count)+1] =
 	{
-		StringIntern::Create("position"),
-		StringIntern::Create("colour"),
-		StringIntern::Create("texture"),
-		StringIntern::Create("normal"),
-		StringIntern::Create("")
+		"position"_i,
+		"colour"_i,
+		"texture"_i,
+		"normal"_i,
+		""_i
 	};
 
 	return strings[AS_INDEX(VC)];

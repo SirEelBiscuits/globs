@@ -1,20 +1,43 @@
 #pragma once
 
-#include "ishader.h"
-#include "shadergl.h"
+#include "glwrapper.h"
+#include "shader.h"
 
 #include "../util/utility.h"
 #include "../util/stringintern.h"
 
 #include <string>
 
+/**
+ * Factory class for shader objects.
+ *
+ * This currently only returns ShaderGL objects.
+ */
 class ShaderLoader {
 public:
-	static IShader* LoadShaderFromFiles(
+	/**
+	 * Opens a file, reads it in and passes it to the other overload
+	 *
+	 * Don't repeat yourself :)
+	 */
+	static Shader* LoadShaderFromFiles(
 		char const* fragmentShaderFilename,
 		char const* vertexShaderFilename
 	);
-	static IShader* LoadShaderFromBuffers(
+
+	/**
+	 * Creates a shader program from vertex and fragment shaders.
+	 *
+	 * This will automatically detect the supported vertex attributes
+	 * and supported texture types from the shader's arguments. To see
+	 * which names are picked up for which variables, see the appropriate
+	 * documentation.
+	 *
+	 * \returns nullptr on failure
+	 * \sa VertComponent
+	 * \sa TextureType
+	 */
+	static Shader* LoadShaderFromBuffers(
 		std::string const& fragmentShader,
 	       	std::string const& vertexShader
 	);

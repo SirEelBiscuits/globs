@@ -1,9 +1,9 @@
 #include "testsuite/testsuite.h"
 
-#include "../graphics/iimageloader.h"
+#include "../graphics/imageloader.h"
 #include "../graphics/devilwrapper.h"
 #include "../graphics/textureloader.h"
-#include "../graphics/ishader.h"
+#include "../graphics/shader.h"
 #include "../graphics/shaderloader.h"
 #include "../graphics/vert.h"
 #include "../graphics/model.h"
@@ -18,7 +18,7 @@ namespace UnitTesting {
 #define METHOD_FAIL false
 
 BEGIN_TEST_DEF(DevILWrapperTest) {
-	//IImageLoader& obj = DevILWrapper("test.jpg");
+	//ImageLoader& obj = DevILWrapper("test.jpg");
 	DevILWrapper obj("test.jpg");
 	ASSERT_NEQ(0u, obj.getWidth());
 	ASSERT_NEQ(0u, obj.getHeight());
@@ -27,7 +27,7 @@ BEGIN_TEST_DEF(DevILWrapperTest) {
 }
 END_TEST_DEF(DevILWrapperTest);
 
-class fakeIL : public IImageLoader {
+class fakeIL : public ImageLoader {
 public:
 	fakeIL(){}
 	virtual unsigned int getWidth() const override { return 2; }
@@ -87,7 +87,7 @@ BEGIN_TEST_DEF(ShaderTest) {
 	 * This is the first test I've attempted to write before the code it
 	 * will test has been written. Forgive me :)
 	 */
-	std::vector<IShader*> v;
+	std::vector<Shader*> v;
 	std::string frag(
 R"(#version 150
 in vec4 cfv;

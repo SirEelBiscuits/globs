@@ -1,12 +1,5 @@
 #include "shadergl.h"
 
-ShaderGL::ShaderGL(GLuint id)
-	: shaderID(id)
-	, supportedTextureTypes{}
-	, supportedAttributes{}
-{
-}
-
 ShaderGL::ShaderGL(
 	GLuint id,
 	std::vector<VertComponent>& attributeTypes,
@@ -50,7 +43,7 @@ bool ShaderGL::bind() const {
 	if(!isShaderValid())
 		return false;
 	bool returnFlag = true;
-	for(int i = 0; i < AS_INDEX(VertComponent::Count); ++i ) {
+	for(int i = 0; i < AS_INDEX(VertComponent::Count); ++i) {
 		VertComponent cur = static_cast<VertComponent>(i);
 		if(isAttributeSupported(cur)) {
 			GLint pos = glGetAttribLocation(

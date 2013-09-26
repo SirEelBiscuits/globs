@@ -60,6 +60,10 @@ bool Logger::setFileName(std::string filename) {
 	return s_file != nullptr;
 }
 
+void Logger::echo(bool toEcho) {
+	s_echo = toEcho;
+}
+
 void Logger::setLogAll(bool newLogAll) {
 	s_logAll = newLogAll;
 }

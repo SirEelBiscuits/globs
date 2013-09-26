@@ -1,12 +1,12 @@
 #include "shaderloader.h"
 
-#include "ishader.h"
+#include "shadergl.h"
 #include "../util/utility.h"
 
 #undef LOG
 StringIntern ShaderLoader::LOG("Shader");
 
-IShader* ShaderLoader::LoadShaderFromFiles(
+Shader* ShaderLoader::LoadShaderFromFiles(
 	char const* fragmentShaderFilename,
 	char const* vertexShaderFilename
 ) {
@@ -16,7 +16,7 @@ IShader* ShaderLoader::LoadShaderFromFiles(
 	return LoadShaderFromBuffers(frag, vert);
 }
 
-IShader* ShaderLoader::LoadShaderFromBuffers(
+Shader* ShaderLoader::LoadShaderFromBuffers(
 	std::string const& fragmentShaderSource,
 	std::string const& vertexShaderSource
 ) {

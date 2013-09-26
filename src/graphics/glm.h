@@ -1,4 +1,12 @@
 #pragma once
+
+/**
+ * \file glm wrapper header
+ *
+ * This exists to make sure that defines to control glm's behaviour are set
+ * the same project wide
+ */
+
 #define GLM_FORCE_CXX11
 
 #pragma GCC diagnostic push

@@ -10,7 +10,10 @@ PROGRAM = glTest
 SRCDIR = src
 OBJDIR = intermediate
 OUTDIR = bin
-CPP_FILES := $(wildcard $(SRCDIR)/*.cpp)
+CPP_FILES :=# $(wildcard $(SRCDIR)/*.cpp)
+
+include inc.mk
+
 OBJS := $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(CPP_FILES))
 LIBBASE = Z:\\Windows\\ManualInstalls\\dev-libs
 CXX = g++
@@ -18,6 +21,8 @@ CPPFLAGS += -Wall -pedantic -std=c++11 -I$(LIBBASE)\\include -static-libgcc -sta
 LDFLAGS += -L$(LIBBASE)\\lib -lGLFW -lglew32s -lopengl32 -lglu32 -lDevIL -lILU -lILUT
  
 all: version $(PROGRAM) 
+
+nolink: version $(OBJS)
  
 $(PROGRAM): .depend $(OBJS)
 	$(CXX) $(CPPFLAGS) $(OBJS) $(LDFLAGS) -o $(OUTDIR)/$(PROGRAM)
@@ -38,13 +43,13 @@ version:
 # These are the pattern matching rules. In addition to the automatic
 # variables used here, the variable $* that matches whatever % stands for
 # can be useful in special cases.
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+$(OBJS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) $(CPPFLAGS) -c $< -o $@
  
 %: %.cpp
 	$(CXX) $(CPPFLAGS) -o $@ $<
  
 clean:
-	rm -f .depend $(OBJDIR)/*.o $(OUTDIR)/$(PROGRAM)
+	find $(OBJDIR) -regex ".*\.o" -print0 | xargs -0 rm
  
 .PHONY: clean depend

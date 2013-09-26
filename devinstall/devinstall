@@ -3,7 +3,14 @@
 cd $(dirname "$0")
 cd ..
 
-mkdir intermediate
 cp devinstall/precomtocopy .git/hooks/pre-commit
 git submodule init src/gargamel
 git submodule update src/gargamel
+
+git submodule init src/testing/testsuite
+git submodule update src/testing/testsuite
+
+mkdir intermediate
+cd src
+find * -type d -exec mkdir ../intermediate/\{\} \;
+

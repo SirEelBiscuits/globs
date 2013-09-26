@@ -5,7 +5,7 @@
 #include "../util/log.h"
 #include "../util/stringintern.h"
 
-Texture* TextureLoader::LoadTexture(IImageLoader&& il, TextureType type) {
+Texture* TextureLoader::LoadTexture(ImageLoader&& il, TextureType type) {
 	CLEAR_GL_ERRORS
 	static StringIntern const log("Texture");
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ishader.h"
-#include "shadergl.h"
+#include "glwrapper.h"
+#include "shader.h"
 
 #include "../util/utility.h"
 #include "../util/stringintern.h"
@@ -20,7 +20,7 @@ public:
 	 *
 	 * Don't repeat yourself :)
 	 */
-	static IShader* LoadShaderFromFiles(
+	static Shader* LoadShaderFromFiles(
 		char const* fragmentShaderFilename,
 		char const* vertexShaderFilename
 	);
@@ -37,7 +37,7 @@ public:
 	 * \sa VertComponent
 	 * \sa TextureType
 	 */
-	static IShader* LoadShaderFromBuffers(
+	static Shader* LoadShaderFromBuffers(
 		std::string const& fragmentShader,
 	       	std::string const& vertexShader
 	);

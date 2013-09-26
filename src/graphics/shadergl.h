@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ishader.h"
+#include "shader.h"
 #include "texture.h"
 #include "vert.h"
 
@@ -15,7 +15,7 @@
  *
  * \sa Shader
  */
-class ShaderGL : public IShader {
+class ShaderGL : public Shader {
 public:
 	/**
 	 * Constructor

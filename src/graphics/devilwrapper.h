@@ -1,5 +1,5 @@
 #pragma once
-#include "iimageloader.h"
+#include "imageloader.h"
 
 /**
  * Wraps the DevIL calls, to aid abstractability.
@@ -7,7 +7,7 @@
  * This class uses RAII, so the file will be loaded on instantiation, and
  * the file closed on destruction.
  */
-class DevILWrapper : public IImageLoader {
+class DevILWrapper : public ImageLoader {
 public:
 	/**
 	 * Aquire the named file, and load the contained image.

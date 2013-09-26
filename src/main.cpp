@@ -7,7 +7,7 @@
 #include "version.inc"
 
 #include "graphics/glwrapper.h"
-#include "graphics/ishader.h"
+#include "graphics/shader.h"
 #include "graphics/shaderloader.h"
 #include "graphics/model.h"
 #include "graphics/modelloader.h"
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 	Init(argc, argv);
 
 	LOG_MSG("INFO", "Loading shader");
-	IShader* basicShader = ShaderLoader::LoadShaderFromFiles(
+	Shader* basicShader = ShaderLoader::LoadShaderFromFiles(
 		"basic.frag",
 		"basic.vert"
 	);

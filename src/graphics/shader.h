@@ -9,12 +9,12 @@
  * Defines the functions shaders need to support for this project to use
  * them.
  */
-class IShader {
+class Shader {
 public:
 	/**
 	 * virtual destructor, in case its needed by deriving classes.
 	 */
-	virtual ~IShader(){}
+	virtual ~Shader(){}
 
 	/**
 	 * \returns a uniquely identifying number.

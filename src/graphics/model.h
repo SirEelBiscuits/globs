@@ -6,7 +6,7 @@
 #include "vert.h"
 #include "../util/log.h"
 
-#include "ishader.h"
+#include "shader.h"
 
 /**
  * Model interface class.
@@ -60,7 +60,7 @@ public:
 	 *
 	 * \return true if no errors reported.
 	 */
-	virtual bool useShader(IShader* shader) = 0;
+	virtual bool useShader(Shader* shader) = 0;
 
 	/**
 	 * \return a unique id for the object

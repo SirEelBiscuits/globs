@@ -7,7 +7,7 @@
  * able to put that image into openGL. The image needs to be loaded into an
  * RGBA format.
  */
-class IImageLoader {
+class ImageLoader {
 public:
 	/**
 	 * Data should have the format of 4 bytes per pixel
@@ -29,5 +29,5 @@ public:
 	/**
 	 * Virtual destructor, in case derived classes need it.
 	 */
-	virtual              ~IImageLoader(){}
+	virtual              ~ImageLoader(){}
 };

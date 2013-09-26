@@ -54,7 +54,7 @@ bool ModelGL::unbind() const {
 	return LOG_GL_ERRORS;
 }
 
-bool ModelGL::useShader(IShader* shader) {
+bool ModelGL::useShader(Shader* shader) {
 	bool returnFlag = true;
 	returnFlag &= bind();
 	glBindBuffer(GL_ARRAY_BUFFER, vertData);

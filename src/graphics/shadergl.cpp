@@ -1,12 +1,5 @@
 #include "shadergl.h"
 
-ShaderGL::ShaderGL(GLuint id)
-	: shaderID(id)
-	, supportedTextureTypes{}
-	, supportedAttributes{}
-{
-}
-
 ShaderGL::ShaderGL(
 	GLuint id,
 	std::vector<VertComponent>& attributeTypes,

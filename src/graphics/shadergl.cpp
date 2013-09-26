@@ -71,6 +71,12 @@ bool ShaderGL::bind() const {
 			);
 		}
 	}
+	/*
+	 * we have to set the shader as current to be able to mess with the
+	 * texture associations. It's possible this is something that isn't
+	 * stored in the VAO or something, and will fuck up later
+	 */
+	set();
 	for(int i = 0; i < AS_INDEX(TextureType::Count); ++i) {
 		TextureType cur = static_cast<TextureType>(i);
 		if(isTextureTypeSupported(cur)) {

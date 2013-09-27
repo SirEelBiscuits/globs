@@ -4,6 +4,7 @@ cd $(dirname "$0")
 cd ..
 
 cp devinstall/precomtocopy .git/hooks/pre-commit
+cp devinstall/prepare-commit-msg .git/hooks
 git submodule init src/gargamel
 git submodule update src/gargamel
 

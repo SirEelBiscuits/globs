@@ -3,12 +3,12 @@
 #this bit is experimental
 files=$(find . -regex ".*\.\(cpp\|h\)")
  
-todo=$(echo "$files" | xargs grep "TODO" | wc -l)
+todo=$(echo "$files" | xargs grep "\(TODO\|\\todo\)" | wc -l)
 echo "Todos found: $todo"
  
 diffed=$(echo "$files" | git diff --staged)
-added=$(echo "$diffed" | grep "^\+.*TODO" | wc -l)
-subbed=$(echo "$diffed" | grep "^\-.*TODO" | wc -l)
+added=$(echo "$diffed" | grep "^\+.*\(TODO\|\\todo\)" | wc -l)
+subbed=$(echo "$diffed" | grep "^\-.*\(TODO\|\\todo\)" | wc -l)
  
 [ $added -ne 0 ] && echo "You've added $added todos"
 [ $subbed -ne 0 ] && echo "You've fixed $subbed todos"

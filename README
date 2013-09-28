@@ -1,0 +1,56 @@
+GLOBS
+=====
+
+It's not a good name, I'll fix it later.
+
+This project exists for me to get learn OpenGL programming, along side
+putting to use things I've learned about C++11 and test driven
+development. 
+
+Dependencies
+------------
+
+This project has been tested with MinGW 4.8, 64 bit, but work has all
+been done from cygwin. The scripts discussed in this file are all bash
+scripts, and I recommend using them if possible . It should work with
+the equivalent version of GCC. In theory Clang should also be able to
+compile it, but I've not tested this. MSVC11 is almost certainly missing
+features that are relied upon, although I've not checked, but I know it
+lacks constexpr support, which I will be relying upon in future.
+
+Libraries:
+Opengl, glew, glfw, glm, devil
+
+OpenGL should come with your os, on linux the library is usually called
+libMesa, the others are available in your package manager, or at the
+following websites:
+
+http://glew.sourceforge.net/
+http://www.glfw.org/
+http://glm.g-truc.net/0.9.4/index.html
+http://openil.sourceforge.net/
+
+The supplied makefile is mostly fine, but the values of CXX and LDFLAGS
+will probably need changing to match the program and library names on
+linux.
+
+Getting Started
+---------------
+
+After cloning this repository, I recommend you run devinstall/devinstall
+to set up the hooks I've been using, and sort out directories and
+submodules. After this, assuming you have all the dependencies, it
+should compile.
+
+Building
+--------
+
+This project uses make for building, but also relies on build.sh to
+supply the makefile with the full list of files to work with. If no new
+files have been added, building with a simple make call should be safe.
+
+Known Issues
+------------
+
+The dependency checking I've put in the makefile fails at picking up
+header changes propagations sometimes. I'll look into it one day.

@@ -5,13 +5,3 @@ cd ..
 
 cp devinstall/precomtocopy .git/hooks/pre-commit
 cp devinstall/prepare-commit-msg .git/hooks
-git submodule init src/gargamel
-git submodule update src/gargamel
-
-git submodule init src/testing/testsuite
-git submodule update src/testing/testsuite
-
-mkdir intermediate
-cd src
-find * -type d -exec mkdir ../intermediate/\{\} \;
-
